@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Nyraa',
+      debugShowCheckedModeBanner: false, // Removes the debug badge
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFBE6992)),
         useMaterial3: true,

@@ -8,8 +8,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade50, // Light background for a premium look
       appBar: AppBar(
         backgroundColor: const Color(0xFFBE6992),
+        elevation: 4, // Adds shadow for depth
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -25,11 +27,18 @@ class HomePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "Search 'Dresses'",
-                    hintStyle: const TextStyle(color: Colors.grey),
+                    hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
@@ -55,7 +64,7 @@ class HomePage extends StatelessWidget {
         children: [
           // Address Selector Section
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             child: GestureDetector(
               onTap: () {
                 showModalBottomSheet(
@@ -64,22 +73,30 @@ class HomePage extends StatelessWidget {
                 );
               },
               child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey.shade200),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade200,
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: const Row(
                   children: [
-                    Icon(Icons.location_on, color: Color(0xFFBE6992)),
-                    SizedBox(width: 10),
+                    Icon(Icons.location_on, color: Color(0xFFBE6992), size: 20),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'Deliver to: 123 Main St, City, Country',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    Icon(Icons.arrow_drop_down),
+                    Icon(Icons.arrow_drop_down, color: Colors.grey),
                   ],
                 ),
               ),
@@ -88,41 +105,75 @@ class HomePage extends StatelessWidget {
 
           // Popular Categories Section
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: SizedBox(
-              height: 100,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                children: [
-                  _buildCategoryItem(context, 'assets/images/category/category1.jpg'),
-                  _buildCategoryItem(context, 'assets/images/category/category2.jpg'),
-                  _buildCategoryItem(context, 'assets/images/category/category3.jpg'),
-                  _buildCategoryItem(context, 'assets/images/category/category4.jpg'),
-                  _buildCategoryItem(context, 'assets/images/category/category5.jpg'),
-                  _buildCategoryItem(context, 'assets/images/category/category6.jpg'),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    'Popular Categories',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 100,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    children: [
+                      _buildCategoryItem(context, 'assets/images/category/category1.jpg', 'Dresses'),
+                      _buildCategoryItem(context, 'assets/images/category/category2.jpg', 'Accessories'),
+                      _buildCategoryItem(context, 'assets/images/category/category3.jpg', 'Bottoms'),
+                      _buildCategoryItem(context, 'assets/images/category/category4.jpg', 'Tops'),
+                      _buildCategoryItem(context, 'assets/images/category/category5.jpg', 'Footwear'),
+                      _buildCategoryItem(context, 'assets/images/category/category6.jpg', 'Skirts'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Sliding Banner Section (Full Width)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 200,
+                  autoPlay: true,
+                  enlargeCenterPage: false,
+                  viewportFraction: 1.0, // Makes the carousel full-width
+                ),
+                items: [
+                  _buildBannerImage('assets/images/banner/banner1.jpg'),
+                  _buildBannerImage('assets/images/banner/banner2.jpg'),
                 ],
               ),
             ),
           ),
 
-          // Sliding Banner Section (Full Width)
-          CarouselSlider(
-            options: CarouselOptions(
-              height: 200,
-              autoPlay: true,
-              enlargeCenterPage: false,
-              viewportFraction: 1.0, // Makes the carousel full-width
-            ),
-            items: [
-              _buildBannerImage('assets/images/banner/banner1.jpg'),
-              _buildBannerImage('assets/images/banner/banner2.jpg'),
-            ],
+          // Divider for Visual Separation
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Divider(color: Colors.grey.shade200, thickness: 1),
           ),
 
-          // Top Deals Section (Updated to 3x2 Grid)
+          // Top Deals Section
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -132,12 +183,12 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 GridView.count(
-                  crossAxisCount: 3, // 3 items per row
+                  crossAxisCount: 3,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.75, // Adjusted aspect ratio for better fit
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.75,
                   children: [
                     _buildTopDealItem('Winter Wear', 'assets/images/topdeals/product1.jpg'),
                     _buildTopDealItem('Festive Wear', 'assets/images/topdeals/product2.jpg'),
@@ -151,24 +202,42 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          // Banner with gaps on left and right
+          // Normal Banner Section (Corrected Image Path)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10), // 16 for a cleaner look
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                'assets/images/normalbanner/banner1.jpg',
-                height: 100,
-                width: double.infinity,
-                fit: BoxFit.cover,  
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade200, width: 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade200,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  'assets/images/normalbanner/banner1.jpg',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 160, // Adjust height based on your design
+                ),
               ),
             ),
           ),
 
 
+          // Divider for Visual Separation
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Divider(color: Colors.grey.shade200, thickness: 1),
+          ),
+
           // Products with Price Section
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -176,12 +245,13 @@ class HomePage extends StatelessWidget {
                   'Featured Products',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
+                const SizedBox(height: 10),
                 GridView.count(
                   crossAxisCount: 2,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
                   childAspectRatio: 0.7,
                   children: [
                     _buildProductCard('Product 1', 'assets/images/featuredproducts/product1.jpg', '\$29.99'),
@@ -194,24 +264,31 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
+          // Divider for Visual Separation
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Divider(color: Colors.grey.shade200, thickness: 1),
+          ),
+
           // Flash Deals Section
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
                     'Flash Deals',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
+                const SizedBox(height: 10),
                 SizedBox(
                   height: 150,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     children: [
                       _buildFlashDealItem('assets/images/flashsale/product1.jpg'),
                       _buildFlashDealItem('assets/images/flashsale/product2.jpg'),
@@ -223,6 +300,8 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
+
+          const SizedBox(height: 20), // Extra spacing at the bottom
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -230,6 +309,7 @@ class HomePage extends StatelessWidget {
         unselectedItemColor: Colors.grey,
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
+        elevation: 8, // Adds shadow for a premium look
         items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -311,9 +391,9 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryItem(BuildContext context, String imagePath) {
+  Widget _buildCategoryItem(BuildContext context, String imagePath, String categoryName) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Column(
         children: [
           Container(
@@ -321,17 +401,24 @@ class HomePage extends StatelessWidget {
             height: 70,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey.shade400, width: 2),
+              border: Border.all(color: Colors.grey.shade300, width: 2),
               image: DecorationImage(
                 image: AssetImage(imagePath),
                 fit: BoxFit.cover,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade200,
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 5),
-          const Text(
-            'Category',
-            style: TextStyle(fontSize: 12),
+          const SizedBox(height: 6),
+          Text(
+            categoryName,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -342,7 +429,7 @@ class HomePage extends StatelessWidget {
     return Container(
       width: double.infinity, // Ensures full width
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
@@ -354,15 +441,23 @@ class HomePage extends StatelessWidget {
   Widget _buildTopDealItem(String title, String imagePath) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey.shade300),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade200,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         children: [
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                 image: DecorationImage(
                   image: AssetImage(imagePath),
                   fit: BoxFit.cover,
@@ -374,14 +469,14 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               title,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ),
           const Padding(
             padding: EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Top Deals',
-              style: TextStyle(fontSize: 12, color: Colors.green),
+              style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -392,31 +487,39 @@ class HomePage extends StatelessWidget {
   Widget _buildFlashDealItem(String imagePath) {
     return Container(
       width: 120,
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 6),
       child: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey.shade300),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade200),
               image: DecorationImage(
                 image: AssetImage(imagePath),
                 fit: BoxFit.cover,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade200,
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
           ),
           Positioned(
-            top: 5,
-            left: 5,
+            top: 8,
+            left: 8,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
                 color: Colors.red,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(6),
               ),
               child: const Text(
                 '-20%',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -427,10 +530,18 @@ class HomePage extends StatelessWidget {
 
   Widget _buildProductCard(String name, String imagePath, String price) {
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade200,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -446,14 +557,14 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 6),
           Text(
             name,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
           Text(
             price,
-            style: const TextStyle(fontSize: 14, color: Color(0xFFBE6992)),
+            style: const TextStyle(fontSize: 14, color: Color(0xFFBE6992), fontWeight: FontWeight.w500),
           ),
         ],
       ),
