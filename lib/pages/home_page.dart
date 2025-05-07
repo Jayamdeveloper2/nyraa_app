@@ -101,18 +101,18 @@ class HomePage extends StatelessWidget {
                   _buildCategoryItem(context, 'assets/images/category/category4.jpg'),
                   _buildCategoryItem(context, 'assets/images/category/category5.jpg'),
                   _buildCategoryItem(context, 'assets/images/category/category6.jpg'),
-
                 ],
               ),
             ),
           ),
 
-          // Sliding Banner Section (Carousel)
+          // Sliding Banner Section (Full Width)
           CarouselSlider(
             options: CarouselOptions(
               height: 200,
               autoPlay: true,
-              enlargeCenterPage: true,
+              enlargeCenterPage: false,
+              viewportFraction: 1.0, // Makes the carousel full-width
             ),
             items: [
               _buildBannerImage('assets/images/banner/banner1.jpg'),
@@ -120,62 +120,53 @@ class HomePage extends StatelessWidget {
             ],
           ),
 
-          // Sample Products Section
+          // Top Deals Section (Updated to 3x2 Grid)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    'Sample Products',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                const Text(
+                  'Top Deals',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    children: [
-                      _buildProductImage('assets/images/product1.jpg'),
-                      _buildProductImage('assets/images/product2.jpg'),
-                      _buildProductImage('assets/images/product3.jpg'),
-                      _buildProductImage('assets/images/product4.jpg'),
-                    ],
-                  ),
+                const SizedBox(height: 10),
+                GridView.count(
+                  crossAxisCount: 3, // 3 items per row
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.75, // Adjusted aspect ratio for better fit
+                  children: [
+                    _buildTopDealItem('Winter Wear', 'assets/images/topdeals/product1.jpg'),
+                    _buildTopDealItem('Festive Wear', 'assets/images/topdeals/product2.jpg'),
+                    _buildTopDealItem('Fashion Wear', 'assets/images/topdeals/product3.jpg'),
+                    _buildTopDealItem('Western Wear', 'assets/images/topdeals/product4.jpg'),
+                    _buildTopDealItem('Casual Wear', 'assets/images/topdeals/product1.jpg'),
+                    _buildTopDealItem('Party Wear', 'assets/images/topdeals/product2.jpg'),
+                  ],
                 ),
               ],
             ),
           ),
 
-          // Rounded Image Section (Circular Images like the screenshot)
-
-
-          // Normal Banner Section (Static)
+          // Banner with gaps on left and right
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                color: const Color(0xFFBE6992),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Center(
-                child: Text(
-                  'Super Saver Deals - Limited Time Offers!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10), // 16 for a cleaner look
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                'assets/images/normalbanner/banner1.jpg',
+                height: 100,
+                width: double.infinity,
+                fit: BoxFit.cover,  
               ),
             ),
           ),
 
-          // Products with Price Section (2x2 Grid)
+
+          // Products with Price Section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
@@ -193,17 +184,17 @@ class HomePage extends StatelessWidget {
                   mainAxisSpacing: 10,
                   childAspectRatio: 0.7,
                   children: [
-                    _buildProductCard('Product 1', 'assets/images/product1.jpg', '\$29.99'),
-                    _buildProductCard('Product 2', 'assets/images/product2.jpg', '\$39.99'),
-                    _buildProductCard('Product 3', 'assets/images/product3.jpg', '\$19.99'),
-                    _buildProductCard('Product 4', 'assets/images/product4.jpg', '\$49.99'),
+                    _buildProductCard('Product 1', 'assets/images/featuredproducts/product1.jpg', '\$29.99'),
+                    _buildProductCard('Product 2', 'assets/images/featuredproducts/product2.jpg', '\$39.99'),
+                    _buildProductCard('Product 3', 'assets/images/featuredproducts/product3.jpg', '\$19.99'),
+                    _buildProductCard('Product 4', 'assets/images/featuredproducts/product4.jpg', '\$49.99'),
                   ],
                 ),
               ],
             ),
           ),
 
-          // Moving Products / Flash Deals Section
+          // Flash Deals Section
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
@@ -216,18 +207,18 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 150,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
+                SizedBox(
+                  height: 150,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    children: [
+                      _buildFlashDealItem('assets/images/flashsale/product1.jpg'),
+                      _buildFlashDealItem('assets/images/flashsale/product2.jpg'),
+                      _buildFlashDealItem('assets/images/flashsale/product3.jpg'),
+                      _buildFlashDealItem('assets/images/flashsale/product4.jpg'),
+                    ],
                   ),
-                  items: [
-                    _buildProductImage('assets/images/product1.jpg'),
-                    _buildProductImage('assets/images/product2.jpg'),
-                    _buildProductImage('assets/images/product3.jpg'),
-                    _buildProductImage('assets/images/product4.jpg'),
-                  ],
                 ),
               ],
             ),
@@ -237,22 +228,83 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: const Color(0xFFBE6992),
         unselectedItemColor: Colors.grey,
-        items: const [
+        backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: SvgPicture.asset(
+              'assets/icons/home.svg',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            activeIcon: SvgPicture.asset(
+              'assets/icons/home.svg',
+              width: 24,
+              height: 24,
+              color: const Color(0xFFBE6992),
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+            icon: SvgPicture.asset(
+              'assets/icons/category.svg',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            activeIcon: SvgPicture.asset(
+              'assets/icons/category.svg',
+              width: 24,
+              height: 24,
+              color: const Color(0xFFBE6992),
+            ),
+            label: 'Category',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: SvgPicture.asset(
+              'assets/icons/favourites.svg',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            activeIcon: SvgPicture.asset(
+              'assets/icons/favourites.svg',
+              width: 24,
+              height: 24,
+              color: const Color(0xFFBE6992),
+            ),
+            label: 'Favourites',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
+            icon: SvgPicture.asset(
+              'assets/icons/orders.svg',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            activeIcon: SvgPicture.asset(
+              'assets/icons/orders.svg',
+              width: 24,
+              height: 24,
+              color: const Color(0xFFBE6992),
+            ),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/icons/profile.svg',
+              width: 24,
+              height: 24,
+              color: Colors.grey,
+            ),
+            activeIcon: SvgPicture.asset(
+              'assets/icons/profile.svg',
+              width: 24,
+              height: 24,
+              color: const Color(0xFFBE6992),
+            ),
+            label: 'You',
           ),
         ],
       ),
@@ -288,7 +340,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildBannerImage(String imagePath) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      width: double.infinity, // Ensures full width
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
@@ -299,16 +351,76 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProductImage(String imagePath) {
+  Widget _buildTopDealItem(String title, String imagePath) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                image: DecorationImage(
+                  image: AssetImage(imagePath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              title,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Top Deals',
+              style: TextStyle(fontSize: 12, color: Colors.green),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFlashDealItem(String imagePath) {
     return Container(
       width: 120,
       margin: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          image: AssetImage(imagePath),
-          fit: BoxFit.cover,
-        ),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey.shade300),
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 5,
+            left: 5,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: const Text(
+                '-20%',
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
