@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'product_list_page.dart'; // Import the ProductListPage
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,10 +9,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50, // Light background for a premium look
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: const Color(0xFFBE6992),
-        elevation: 4, // Adds shadow for depth
+        elevation: 4,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -29,7 +30,7 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade300,
+                      color: Colors.grey[300]!,
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -40,25 +41,41 @@ class HomePage extends StatelessWidget {
                     hintText: "Search 'Dresses'",
                     hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
                     suffixIcon: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
                       child: SvgPicture.asset(
                         'assets/icons/search.svg',
-                        width: 24,
-                        height: 24,
+                        width: 18,
+                        height: 18,
                         color: const Color(0xFFBE6992),
                       ),
                     ),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 10,
-                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                    alignLabelWithHint: true,
                   ),
+                  style: const TextStyle(fontSize: 14),
+                  textAlignVertical: TextAlignVertical.center,
                 ),
               ),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.list,
+              color: Colors.white,
+              size: 28,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProductListPage()),
+              );
+            },
+            tooltip: 'View All Products',
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -76,11 +93,11 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Colors.grey.shade200),
+                  border: Border.all(color: Colors.grey[200]!),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade200,
+                      color: Colors.grey[200]!,
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -141,10 +158,9 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade200,
+                    color: Colors.grey[200]!,
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -155,7 +171,8 @@ class HomePage extends StatelessWidget {
                   height: 200,
                   autoPlay: true,
                   enlargeCenterPage: false,
-                  viewportFraction: 1.0, // Makes the carousel full-width
+                  viewportFraction: 1.0,
+                  padEnds: false,
                 ),
                 items: [
                   _buildBannerImage('assets/images/banner/banner1.jpg'),
@@ -168,7 +185,7 @@ class HomePage extends StatelessWidget {
           // Divider for Visual Separation
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Divider(color: Colors.grey.shade200, thickness: 1),
+            child: Divider(color: Colors.grey[200]!, thickness: 1),
           ),
 
           // Top Deals Section
@@ -188,31 +205,31 @@ class HomePage extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 0.75,
+                  childAspectRatio: 0.7,
                   children: [
                     _buildTopDealItem('Winter Wear', 'assets/images/topdeals/product1.jpg'),
                     _buildTopDealItem('Festive Wear', 'assets/images/topdeals/product2.jpg'),
                     _buildTopDealItem('Fashion Wear', 'assets/images/topdeals/product3.jpg'),
                     _buildTopDealItem('Western Wear', 'assets/images/topdeals/product4.jpg'),
-                    _buildTopDealItem('Casual Wear', 'assets/images/topdeals/product1.jpg'),
-                    _buildTopDealItem('Party Wear', 'assets/images/topdeals/product2.jpg'),
+                    _buildTopDealItem('Casual Wear', 'assets/images/topdeals/product5.jpg'),
+                    _buildTopDealItem('Party Wear', 'assets/images/topdeals/product6.jpg'),
                   ],
                 ),
               ],
             ),
           ),
 
-          // Normal Banner Section (Corrected Image Path)
+          // Normal Banner Section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade200, width: 1),
+                  border: Border.all(color: Colors.grey[200]!, width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade200,
+                      color: Colors.grey[200]!,
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -222,17 +239,16 @@ class HomePage extends StatelessWidget {
                   'assets/images/normalbanner/banner1.jpg',
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  height: 160, // Adjust height based on your design
+                  height: 160,
                 ),
               ),
             ),
           ),
 
-
           // Divider for Visual Separation
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Divider(color: Colors.grey.shade200, thickness: 1),
+            child: Divider(color: Colors.grey[200]!, thickness: 1),
           ),
 
           // Products with Price Section
@@ -267,7 +283,7 @@ class HomePage extends StatelessWidget {
           // Divider for Visual Separation
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Divider(color: Colors.grey.shade200, thickness: 1),
+            child: Divider(color: Colors.grey[200]!, thickness: 1),
           ),
 
           // Flash Deals Section
@@ -301,7 +317,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 20), // Extra spacing at the bottom
+          const SizedBox(height: 20),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -309,7 +325,7 @@ class HomePage extends StatelessWidget {
         unselectedItemColor: Colors.grey,
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
-        elevation: 8, // Adds shadow for a premium look
+        elevation: 8,
         items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -401,14 +417,14 @@ class HomePage extends StatelessWidget {
             height: 70,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey.shade300, width: 2),
+              border: Border.all(color: Colors.grey[300]!, width: 2),
               image: DecorationImage(
                 image: AssetImage(imagePath),
                 fit: BoxFit.cover,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.shade200,
+                  color: Colors.grey[200]!,
                   blurRadius: 6,
                   offset: const Offset(0, 2),
                 ),
@@ -427,9 +443,8 @@ class HomePage extends StatelessWidget {
 
   Widget _buildBannerImage(String imagePath) {
     return Container(
-      width: double.infinity, // Ensures full width
+      width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
@@ -443,10 +458,10 @@ class HomePage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Colors.grey[200]!),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade200,
+            color: Colors.grey[200]!,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -455,21 +470,26 @@ class HomePage extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                image: DecorationImage(
-                  image: AssetImage(imagePath),
-                  fit: BoxFit.cover,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(imagePath),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: Text(
               title,
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const Padding(
@@ -494,14 +514,14 @@ class HomePage extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.shade200),
+              border: Border.all(color: Colors.grey[200]!),
               image: DecorationImage(
                 image: AssetImage(imagePath),
                 fit: BoxFit.cover,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.shade200,
+                  color: Colors.grey[200]!,
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -533,11 +553,11 @@ class HomePage extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Colors.grey[200]!),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade200,
+            color: Colors.grey[200]!,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
