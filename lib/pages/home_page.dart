@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'product_list_page.dart'; // Import the ProductListPage
+import './product_list_page.dart'; // Import the ProductListScreen
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -70,7 +70,7 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ProductListPage()),
+                MaterialPageRoute(builder: (context) => const ProductListScreen(category: 'all')),
               );
             },
             tooltip: 'View All Products',
