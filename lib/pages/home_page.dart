@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import './product_list_page.dart'; // Import the ProductListScreen
+import '../data/products_data.dart'; // Import the products data
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -136,17 +137,18 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 SizedBox(
                   height: 100,
-                  child: ListView(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    children: [
-                      _buildCategoryItem(context, 'assets/images/category/category1.jpg', 'Dresses'),
-                      _buildCategoryItem(context, 'assets/images/category/category2.jpg', 'Accessories'),
-                      _buildCategoryItem(context, 'assets/images/category/category3.jpg', 'Bottoms'),
-                      _buildCategoryItem(context, 'assets/images/category/category4.jpg', 'Tops'),
-                      _buildCategoryItem(context, 'assets/images/category/category5.jpg', 'Footwear'),
-                      _buildCategoryItem(context, 'assets/images/category/category6.jpg', 'Skirts'),
-                    ],
+                    itemCount: categoryImages.length,
+                    itemBuilder: (context, index) {
+                      return _buildCategoryItem(
+                        context,
+                        categoryImages[index].image,
+                        categoryImages[index].name,
+                        categoryImages[index].id,
+                      );
+                    },
                   ),
                 ),
               ],
@@ -174,10 +176,7 @@ class HomePage extends StatelessWidget {
                   viewportFraction: 1.0,
                   padEnds: false,
                 ),
-                items: [
-                  _buildBannerImage('assets/images/banner/banner1.jpg'),
-                  _buildBannerImage('assets/images/banner/banner2.jpg'),
-                ],
+                items: bannerImages.map((image) => _buildBannerImage(image)).toList(),
               ),
             ),
           ),
@@ -199,21 +198,23 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                GridView.count(
-                  crossAxisCount: 3,
+                GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.7,
+                  ),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.7,
-                  children: [
-                    _buildTopDealItem('Winter Wear', 'assets/images/topdeals/product1.jpg'),
-                    _buildTopDealItem('Festive Wear', 'assets/images/topdeals/product2.jpg'),
-                    _buildTopDealItem('Fashion Wear', 'assets/images/topdeals/product3.jpg'),
-                    _buildTopDealItem('Western Wear', 'assets/images/topdeals/product4.jpg'),
-                    _buildTopDealItem('Casual Wear', 'assets/images/topdeals/product5.jpg'),
-                    _buildTopDealItem('Party Wear', 'assets/images/topdeals/product6.jpg'),
-                  ],
+                  itemCount: topDeals.length,
+                  itemBuilder: (context, index) {
+                    return _buildTopDealItem(
+                      topDeals[index].topic,
+                      topDeals[index].image,
+                      topDeals[index].name,
+                    );
+                  },
                 ),
               ],
             ),
@@ -236,7 +237,7 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 child: Image.asset(
-                  'assets/images/normalbanner/banner1.jpg',
+                  normalBannerImages[0],
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: 160,
@@ -269,12 +270,13 @@ class HomePage extends StatelessWidget {
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
                   childAspectRatio: 0.7,
-                  children: [
-                    _buildProductCard('Product 1', 'assets/images/featuredproducts/product1.jpg', '\$29.99'),
-                    _buildProductCard('Product 2', 'assets/images/featuredproducts/product2.jpg', '\$39.99'),
-                    _buildProductCard('Product 3', 'assets/images/featuredproducts/product3.jpg', '\$19.99'),
-                    _buildProductCard('Product 4', 'assets/images/featuredproducts/product4.jpg', '\$49.99'),
-                  ],
+                  children: allProducts.take(4).map((product) {
+                    return _buildProductCard(
+                      product.name,
+                      product.image,
+                      '\$${product.price.toStringAsFixed(2)}',
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -302,15 +304,17 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 SizedBox(
                   height: 150,
-                  child: ListView(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    children: [
-                      _buildFlashDealItem('assets/images/flashsale/product1.jpg'),
-                      _buildFlashDealItem('assets/images/flashsale/product2.jpg'),
-                      _buildFlashDealItem('assets/images/flashsale/product3.jpg'),
-                      _buildFlashDealItem('assets/images/flashsale/product4.jpg'),
-                    ],
+                    itemCount: flashSales.length,
+                    itemBuilder: (context, index) {
+                      return _buildFlashDealItem(
+                        flashSales[index].image,
+                        flashSales[index].discount,
+                        flashSales[index].name,
+                      );
+                    },
                   ),
                 ),
               ],
@@ -407,36 +411,46 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryItem(BuildContext context, String imagePath, String categoryName) {
+  Widget _buildCategoryItem(BuildContext context, String imagePath, String categoryName, int id) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Column(
-        children: [
-          Container(
-            width: 70,
-            height: 70,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.grey[300]!, width: 2),
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.cover,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[200]!,
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductListScreen(category: categoryName.toLowerCase()),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            categoryName,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-          ),
-        ],
+          );
+        },
+        child: Column(
+          children: [
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.grey[300]!, width: 2),
+                image: DecorationImage(
+                  image: AssetImage(imagePath),
+                  fit: BoxFit.cover,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[200]!,
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              categoryName,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -453,7 +467,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildTopDealItem(String title, String imagePath) {
+  Widget _buildTopDealItem(String topic, String imagePath, String productName) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -485,18 +499,18 @@ class HomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: Text(
-              title,
+              productName,
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
-              'Top Deals',
-              style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w500),
+              topic,
+              style: const TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -504,7 +518,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildFlashDealItem(String imagePath) {
+  Widget _buildFlashDealItem(String imagePath, int discount, String productName) {
     return Container(
       width: 120,
       margin: const EdgeInsets.symmetric(horizontal: 6),
@@ -537,9 +551,25 @@ class HomePage extends StatelessWidget {
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: const Text(
-                '-20%',
-                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+              child: Text(
+                '-$discount%',
+                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 8,
+            left: 8,
+            right: 8,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              color: Colors.black.withOpacity(0.5),
+              child: Text(
+                productName,
+                style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),

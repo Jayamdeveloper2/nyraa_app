@@ -1,4 +1,4 @@
-// Product model class with only a single image
+// Product model class with only a single image and topic
 class Product {
   final int id;
   final String image; // Only one image field
@@ -18,6 +18,7 @@ class Product {
   final int reviewCount;
   final String sku;
   final String vendor;
+  final String topic; // Field for topic
 
   Product({
     required this.id,
@@ -38,14 +39,58 @@ class Product {
     required this.reviewCount,
     required this.sku,
     required this.vendor,
+    required this.topic,
   });
 }
 
-// Product data with single image per product
+// CategoryImage model class
+class CategoryImage {
+  final int id;
+  final String name; // Category name (e.g., Dresses)
+  final String image; // Image URL or path
+
+  CategoryImage({
+    required this.id,
+    required this.name,
+    required this.image,
+  });
+}
+
+// TopDeal model class
+class TopDeal {
+  final int id;
+  final String name; // Product name
+  final String image; // Image URL or path
+  final String topic; // Topic (e.g., Winter Wear)
+
+  TopDeal({
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.topic,
+  });
+}
+
+// FlashSale model class
+class FlashSale {
+  final int id;
+  final String name; // Product name
+  final String image; // Image URL or path
+  final int discount; // Discount percentage
+
+  FlashSale({
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.discount,
+  });
+}
+
+// Product data with single image per product and topic
 final List<Product> allProducts = [
   Product(
     id: 1,
-    image: "https://img.freepik.com/free-photo/woman-choosing-orange-striped-dress_329181-9208.jpg?t=st=1746173552~exp=1746177152~hmac=76468f36ad3dc202b973e75ea6a329275d46edd5da39762ddec1684cd4b62b3f&w=740",
+    image: "assets/images/productlist/product1.jpg",
     name: "Elegant Rose Gold Dress",
     originalPrice: 79.0,
     price: 72.0,
@@ -62,10 +107,11 @@ final List<Product> allProducts = [
     reviewCount: 120,
     sku: "ERGD-001",
     vendor: "ModaVibe Collections",
+    topic: "Festive Wear",
   ),
   Product(
     id: 2,
-    image: "https://ishqme.com/cdn/shop/files/Moroccaneditthumbnail-08.png?v=1714007307&width=500",
+    image: "./assets/images/productlist/product2.jpg",
     name: "Chic Summer Dress",
     originalPrice: 150.0,
     price: 140.0,
@@ -82,10 +128,11 @@ final List<Product> allProducts = [
     sku: "CSD-002",
     vendor: "ChicNest Collections",
     reviewCount: 90,
+    topic: "Party Wear",
   ),
   Product(
     id: 3,
-    image: "https://ishqme.com/cdn/shop/files/Moroccaneditthumbnail-05.png?v=1714007307&width=500",
+    image: "assets/images/productlist/product3.jpg",
     name: "Floral Maxi Dress",
     originalPrice: 95.0,
     price: 90.0,
@@ -102,10 +149,11 @@ final List<Product> allProducts = [
     sku: "FMD-003",
     vendor: "ModaVibe Collections",
     reviewCount: 80,
+    topic: "Fashion Wear",
   ),
   Product(
     id: 4,
-    image: "https://ishqme.com/cdn/shop/products/4_d2a2b25a-2d55-467d-801f-769ac3563bc5.png?v=1745212954&width=500",
+    image: "assets/images/productlist/product4.jpg",
     name: "Classic Yellow Top",
     originalPrice: 250.0,
     price: 250.0,
@@ -122,10 +170,11 @@ final List<Product> allProducts = [
     sku: "CYT-004",
     vendor: "TrendMuse Collections",
     reviewCount: 85,
+    topic: "Casual Wear",
   ),
   Product(
     id: 5,
-    image: "https://ishqme.com/cdn/shop/files/Image_sequintshirt.jpg?v=1745213299&width=500",
+    image: "assets/images/productlist/product5.jpg",
     name: "Casual Denim Shirt",
     originalPrice: 90.0,
     price: 85.0,
@@ -142,10 +191,11 @@ final List<Product> allProducts = [
     sku: "CDS-005",
     vendor: "GlamCove Collections",
     reviewCount: 95,
+    topic: "Casual Wear",
   ),
   Product(
     id: 6,
-    image: "https://ishqme.com/cdn/shop/products/1_76f4f002-214b-4d8c-bfd5-5001a00348d2.png?v=1745317589&width=500",
+    image: "assets/images/productlist/product6.jpg",
     name: "Sleeveless Crop Top",
     originalPrice: 60.0,
     price: 55.0,
@@ -162,10 +212,11 @@ final List<Product> allProducts = [
     sku: "SCT-006",
     vendor: "EvoCouture Collections",
     reviewCount: 75,
+    topic: "Fashion Wear",
   ),
   Product(
     id: 7,
-    image: "https://ishqme.com/cdn/shop/files/Jazz-InkBlueTulipPant_1.webp?v=1744884255&width=500",
+    image: "assets/images/productlist/product7.jpg",
     name: "Linen Trousers",
     originalPrice: 110.0,
     price: 105.0,
@@ -182,10 +233,11 @@ final List<Product> allProducts = [
     sku: "LT-007",
     vendor: "CoutureBloom Collections",
     reviewCount: 65,
+    topic: "Casual Wear",
   ),
   Product(
     id: 8,
-    image: "https://ishqme.com/cdn/shop/files/1_288e9df6-99c1-40a3-be77-a559ffbb8236.jpg?v=1709102965&width=500",
+    image: "assets/images/productlist/product8.jpg",
     name: "Tailored Trousers",
     originalPrice: 130.0,
     price: 125.0,
@@ -202,10 +254,11 @@ final List<Product> allProducts = [
     sku: "TT-008",
     vendor: "ModaVibe Collections",
     reviewCount: 70,
+    topic: "Western Wear",
   ),
   Product(
     id: 9,
-    image: "https://ishqme.com/cdn/shop/files/Neva-AztecEmbroideredPant1.webp?v=1744886223&width=500",
+    image: "assets/images/productlist/product9.jpg",
     name: "High-Waisted Jeans",
     originalPrice: 100.0,
     price: 95.0,
@@ -222,10 +275,11 @@ final List<Product> allProducts = [
     sku: "HWJ-009",
     vendor: "LuxeMint Collections",
     reviewCount: 80,
+    topic: "Western Wear",
   ),
   Product(
     id: 10,
-    image: "https://ishqme.com/cdn/shop/files/TequilaTango-ShirredNavyBlueTop_4a973273-d4ee-4ba4-ac83-7c5c566aeb6b.webp?v=1744888417&width=500",
+    image: "assets/images/productlist/product10.jpg",
     name: "Leather Jacket",
     originalPrice: 220.0,
     price: 200.0,
@@ -242,10 +296,11 @@ final List<Product> allProducts = [
     sku: "LJ-010",
     vendor: "ModaVibe Collections",
     reviewCount: 70,
+    topic: "Winter Wear",
   ),
   Product(
     id: 11,
-    image: "https://ishqme.com/cdn/shop/files/resizeimage-13.jpg?v=1744886755&width=500",
+    image: "assets/images/productlist/product5.jpg",
     name: "Denim Jacket",
     originalPrice: 150.0,
     price: 140.0,
@@ -262,10 +317,11 @@ final List<Product> allProducts = [
     sku: "DJ-011",
     vendor: "Fashnory Collections",
     reviewCount: 75,
+    topic: "Western Wear",
   ),
   Product(
     id: 12,
-    image: "https://ishqme.com/cdn/shop/products/Printed-Halter-Neck-Top.jpg?v=1744719886&width=500",
+    image: "assets/images/productlist/product6.jpg",
     name: "Quilted Bomber Jacket",
     originalPrice: 180.0,
     price: 170.0,
@@ -282,5 +338,133 @@ final List<Product> allProducts = [
     sku: "QBJ-012",
     vendor: "ModaVibe Collections",
     reviewCount: 60,
+    topic: "Winter Wear",
   ),
+];
+
+// Category images list with objects
+final List<CategoryImage> categoryImages = [
+  CategoryImage(
+    id: 1,
+    name: "Dresses",
+    image: "assets/images/category/category1.jpg",
+  ),
+  CategoryImage(
+    id: 2,
+    name: "Tops",
+    image: "assets/images/category/category4.jpg",
+  ),
+  CategoryImage(
+    id: 3,
+    name: "Pants",
+    image: "assets/images/category/category5.jpg",
+  ),
+  CategoryImage(
+    id: 4,
+    name: "Jackets",
+    image: "assets/images/category/category3.jpg",
+  ),
+  CategoryImage(
+    id: 5,
+    name: "Skirts",
+    image: "assets/images/category/category6.jpg",
+  ),
+  CategoryImage(
+    id: 6,
+    name: "Accessories",
+    image: "assets/images/category/category2.jpg",
+  ),
+];
+
+// Top deals list with objects
+final List<TopDeal> topDeals = [
+  TopDeal(
+    id: 1,
+    name: "Leather Jacket",
+    image: "assets/images/topdeals/product1.jpg",
+    topic: "Winter Wear",
+  ),
+  TopDeal(
+    id: 2,
+    name: "Elegant Rose Gold Dress",
+    image: "assets/images/topdeals/product2.jpg",
+    topic: "Festive Wear",
+  ),
+  TopDeal(
+    id: 3,
+    name: "Floral Maxi Dress",
+    image: "assets/images/topdeals/product3.jpg",
+    topic: "Fashion Wear",
+  ),
+  TopDeal(
+    id: 4,
+    name: "Denim Jacket",
+    image: "assets/images/topdeals/product4.jpg",
+    topic: "Western Wear",
+  ),
+  TopDeal(
+    id: 5,
+    name: "Casual Denim Shirt",
+    image: "assets/images/topdeals/product5.jpg",
+    topic: "Casual Wear",
+  ),
+  TopDeal(
+    id: 6,
+    name: "Chic Summer Dress",
+    image: "assets/images/topdeals/product6.jpg",
+    topic: "Party Wear",
+  ),
+];
+
+// Flash sale list with objects
+final List<FlashSale> flashSales = [
+  FlashSale(
+    id: 1,
+    name: "Elegant Rose Gold Dress",
+      image: "assets/images/flashsale/product1.jpg",
+    discount: 9,
+  ),
+  FlashSale(
+    id: 2,
+    name: "Chic Summer Dress",
+    image: "assets/images/flashsale/product2.jpg",
+    discount: 7,
+  ),
+  FlashSale(
+    id: 3,
+    name: "Floral Maxi Dress",
+    image: "assets/images/flashsale/product3.jpg",
+    discount: 5,
+  ),
+  FlashSale(
+    id: 4,
+    name: "Quilted Bomber Jacket",
+    image: "assets/images/flashsale/product4.jpg",
+    discount: 6,
+  ),
+  FlashSale(
+    id: 5,
+    name: "Quilted Bomber Jacket",
+    image: "assets/images/flashsale/product5.jpg",
+    discount: 5,
+  ),
+  FlashSale(
+    id: 5,
+    name: "Quilted Bomber Jacket",
+    image: "assets/images/flashsale/product6.jpg",
+    discount: 4,
+  ),
+
+
+];
+
+// Banner images list
+final List<String> bannerImages = [
+  "assets/images/banner/banner1.jpg",
+  "assets/images/banner/banner2.jpg",
+];
+
+// Normal banner images list
+final List<String> normalBannerImages = [
+  "assets/images/normalbanner/banner1.jpg",
 ];

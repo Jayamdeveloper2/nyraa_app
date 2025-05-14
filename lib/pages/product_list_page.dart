@@ -268,7 +268,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   image: DecorationImage(
-                                    image: NetworkImage(product.image),
+                                    image: AssetImage(product.image),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
