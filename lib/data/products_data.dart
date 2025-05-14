@@ -321,7 +321,7 @@ final List<Product> allProducts = [
   ),
   Product(
     id: 12,
-    image: "assets/images/productlist/product6.jpg",
+    image: "assets/images/productlist/product2.jpg",
     name: "Quilted Bomber Jacket",
     originalPrice: 180.0,
     price: 170.0,
@@ -392,7 +392,7 @@ final List<TopDeal> topDeals = [
   ),
   TopDeal(
     id: 3,
-    name: "Floral Maxi Dress",
+    name: "Floral Maxi Dress", 
     image: "assets/images/topdeals/product3.jpg",
     topic: "Fashion Wear",
   ),
@@ -449,7 +449,7 @@ final List<FlashSale> flashSales = [
     discount: 5,
   ),
   FlashSale(
-    id: 5,
+    id: 6,
     name: "Quilted Bomber Jacket",
     image: "assets/images/flashsale/product6.jpg",
     discount: 4,
