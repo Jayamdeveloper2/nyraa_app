@@ -12,7 +12,7 @@ class AddToCartButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
-        height: 40,
+        height: 36, // Reduced from 40
         decoration: const BoxDecoration(
           color: Color(0xFFBE6992),
           borderRadius: BorderRadius.only(
