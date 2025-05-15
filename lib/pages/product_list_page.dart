@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/products_data.dart'; // Import the product data
 import 'filter_section.dart'; // Import the filter section
 import '../buttons/buttons.dart'; // Import the buttons (AddToCartButton)
+import '../pages/product_details_page.dart';
 
 class ProductListScreen extends StatefulWidget {
   final String? category;
@@ -312,6 +313,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     return GestureDetector(
                       onTap: () {
                         // Navigate to product details
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsPage(
+                              productId: product.id.toString(), // Pass the product ID as a string
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(
