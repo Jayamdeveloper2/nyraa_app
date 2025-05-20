@@ -1,6 +1,7 @@
 // lib/pages/cart_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import '../buttons/buttons.dart';
@@ -699,31 +700,81 @@ class CartPage extends StatelessWidget {
             break;
         }
       },
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
+          icon: SvgPicture.asset(
+            'assets/icons/home.svg',
+            width: 24,
+            height: 24,
+            color: Colors.grey,
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/icons/home.svg',
+            width: 24,
+            height: 24,
+            color: const Color(0xFFBE6992),
+          ),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart_outlined),
-          activeIcon: Icon(Icons.shopping_cart),
+          icon: SvgPicture.asset(
+            'assets/icons/shopping_cart.svg',
+            width: 24,
+            height: 24,
+            color: const Color(0xFFBE6992), // Active color since we're on cart
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/icons/shopping_cart.svg',
+            width: 24,
+            height: 24,
+            color: const Color(0xFFBE6992),
+          ),
           label: 'Cart',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border_outlined),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Favorites',
+          icon: SvgPicture.asset(
+            'assets/icons/favourites.svg',
+            width: 24,
+            height: 24,
+            color: Colors.grey,
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/icons/favourites.svg',
+            width: 24,
+            height: 24,
+            color: const Color(0xFFBE6992),
+          ),
+          label: 'Favourites',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.list_alt_outlined),
-          activeIcon: Icon(Icons.list_alt),
+          icon: SvgPicture.asset(
+            'assets/icons/orders.svg',
+            width: 24,
+            height: 24,
+            color: Colors.grey,
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/icons/orders.svg',
+            width: 24,
+            height: 24,
+            color: const Color(0xFFBE6992),
+          ),
           label: 'Orders',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
-          label: 'Profile',
+          icon: SvgPicture.asset(
+            'assets/icons/profile.svg',
+            width: 24,
+            height: 24,
+            color: Colors.grey,
+          ),
+          activeIcon: SvgPicture.asset(
+            'assets/icons/profile.svg',
+            width: 24,
+            height: 24,
+            color: const Color(0xFFBE6992),
+          ),
+          label: 'You',
         ),
       ],
     );
