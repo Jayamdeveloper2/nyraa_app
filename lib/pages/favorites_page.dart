@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../providers/favorites_provider.dart';
 import '../providers/cart_provider.dart';
 import '../pages/product_details_page.dart';
-import '../widgets/custom_bottom_navbar.dart';
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
@@ -30,7 +29,6 @@ class FavoritesPage extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
-                // Show clear favorites confirmation
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -43,7 +41,6 @@ class FavoritesPage extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          // Clear all favorites
                           for (var product in List.from(favorites)) {
                             favoritesProvider.removeFromFavorites(product.id);
                           }
@@ -68,30 +65,7 @@ class FavoritesPage extends StatelessWidget {
       body: favorites.isEmpty
           ? _buildEmptyFavorites(context)
           : _buildFavoritesContent(context, favorites, favoritesProvider),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 2,
-        onTap: (index) => _handleNavigation(context, index),
-      ),
     );
-  }
-
-  void _handleNavigation(BuildContext context, int index) {
-    if (index == 2) return;
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, '/cart');
-        break;
-      case 3:
-        Navigator.pushReplacementNamed(context, '/orders');
-        break;
-      case 4:
-        Navigator.pushReplacementNamed(context, '/profile');
-        break;
-    }
   }
 
   Widget _buildEmptyFavorites(BuildContext context) {
@@ -123,7 +97,9 @@ class FavoritesPage extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+            onPressed: () {
+              // Navigate to home via bottom nav bar (handled by MainApp)
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFBE6992),
               foregroundColor: Colors.white,
@@ -140,10 +116,7 @@ class FavoritesPage extends StatelessWidget {
   }
 
   Widget _buildFavoritesContent(
-      BuildContext context,
-      List<dynamic> favorites,
-      FavoritesProvider favoritesProvider,
-      ) {
+      BuildContext context, List<dynamic> favorites, FavoritesProvider favoritesProvider) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: favorites.length,
@@ -164,13 +137,10 @@ class FavoritesPage extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => ProductDetailsPage(
-                    productId: product.id.toString(),
-                  ),
-                ),
+                '/product-details',
+                arguments: {'productId': product.id.toString()},
               );
             },
             child: Row(
@@ -264,7 +234,6 @@ class FavoritesPage extends StatelessWidget {
                         color: Colors.grey,
                       ),
                       onPressed: () {
-                        // Show confirmation dialog
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -299,9 +268,7 @@ class FavoritesPage extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 12),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Add to cart
-                          Provider.of<CartProvider>(context, listen: false)
-                              .addItem(product);
+                          Provider.of<CartProvider>(context, listen: false).addItem(product);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Added to cart!'),

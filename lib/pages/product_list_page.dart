@@ -1,14 +1,12 @@
 // lib/pages/product_list_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../data/products_data.dart'; // Import the product data
-import 'filter_section.dart'; // Import the filter section
-import '../buttons/buttons.dart'; // Import the buttons (AddToCartButton)
+import '../data/products_data.dart';
+import 'filter_section.dart';
+import '../buttons/buttons.dart';
 import '../pages/product_details_page.dart';
 import '../providers/favorites_provider.dart';
 import '../providers/cart_provider.dart';
-import '../widgets/custom_bottom_navbar.dart'; // Import the custom bottom navbar
 
 class ProductListScreen extends StatefulWidget {
   final String? category;
@@ -30,7 +28,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     'material': [],
     'brand': [],
   };
-  List<String> appliedFilters = []; // To store applied filter labels
+  List<String> appliedFilters = [];
 
   @override
   void initState() {
@@ -44,7 +42,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
       result = result.where((p) => p.category == widget.category!.toLowerCase()).toList();
     }
 
-    // Apply filters
     if (filters['availability'].isNotEmpty) {
       result = result.where((p) => filters['availability'].contains(p.availability)).toList();
     }
@@ -62,7 +59,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
       result = result.where((p) => filters['brand'].contains(p.brand)).toList();
     }
 
-    // Apply sorting
     switch (sortOption) {
       case 'priceLowToHigh':
         result.sort((a, b) => a.price.compareTo(b.price));
@@ -76,7 +72,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
         break;
     }
 
-    // Generate applied filter labels
     List<String> tempFilters = [];
     if (filters['availability'].isNotEmpty) {
       tempFilters.add('Availability: ${filters['availability'].join(", ")}');
@@ -126,9 +121,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final cartProvider = Provider.of<CartProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50], // Match HomePage background
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: const Color(0xFFBE6992), // Match HomePage AppBar color
+        backgroundColor: const Color(0xFFBE6992),
         elevation: 4,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,7 +178,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               size: 28,
             ),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/cart');
+              // Navigate to cart via bottom nav bar (handled by MainApp)
             },
           ),
         ],
@@ -191,7 +186,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Filter Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               child: Column(
@@ -244,7 +238,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ),
                         child: DropdownButton<String>(
                           value: sortOption,
-                          underline: const SizedBox(), // Remove default underline
+                          underline: const SizedBox(),
                           icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                           items: const [
                             DropdownMenuItem(value: 'bestSelling', child: Text('Best Selling')),
@@ -304,15 +298,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ],
               ),
             ),
-
-            // Product Grid
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.60, // Increased to prevent overflow
+                    childAspectRatio: 0.60,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
                   ),
@@ -323,14 +315,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
                     return GestureDetector(
                       onTap: () {
-                        // Navigate to product details
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsPage(
-                              productId: product.id.toString(), // Pass the product ID as a string
-                            ),
-                          ),
+                          '/product-details',
+                          arguments: {'productId': product.id.toString()},
                         );
                       },
                       child: Container(
@@ -357,7 +345,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               child: Stack(
                                 children: [
                                   AspectRatio(
-                                    aspectRatio: 1, // Square image to prevent overflow
+                                    aspectRatio: 1,
                                     child: Image.asset(
                                       product.image,
                                       fit: BoxFit.cover,
@@ -397,9 +385,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                     right: 8,
                                     child: GestureDetector(
                                       onTap: () {
-                                        // Toggle favorite status
                                         if (isFavorite) {
-                                          // Show confirmation dialog
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
@@ -553,7 +539,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ),
                             AddToCartButton(
                               onPressed: () {
-                                // Add to cart logic
                                 cartProvider.addItem(product);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -574,30 +559,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) return; // Prevent re-navigation to current page
-
-          switch (index) {
-            case 0:
-              Navigator.pushReplacementNamed(context, '/home');
-              break;
-            case 1:
-              Navigator.pushReplacementNamed(context, '/cart');
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/favorites');
-              break;
-            case 3:
-              Navigator.pushReplacementNamed(context, '/orders');
-              break;
-            case 4:
-              Navigator.pushReplacementNamed(context, '/profile');
-              break;
-          }
-        },
       ),
     );
   }

@@ -1,9 +1,7 @@
 // lib/pages/order_confirmation_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/order_provider.dart';
-import '../widgets/custom_bottom_navbar.dart';
 import 'orders_page.dart';
 
 class OrderConfirmationPage extends StatelessWidget {
@@ -26,6 +24,13 @@ class OrderConfirmationPage extends StatelessWidget {
         title: const Text(
           'Order Confirmation',
           style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            // Navigate back to the root to ensure MainApp handles navigation
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -75,7 +80,9 @@ class OrderConfirmationPage extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/order-confirmation');
+                    // Navigate to the root; MainApp will switch to Orders page via bottom nav
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    // Note: To switch to Orders tab, user can tap the Orders icon in the bottom nav
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFBE6992),
@@ -99,7 +106,9 @@ class OrderConfirmationPage extends StatelessWidget {
                 height: 50,
                 child: OutlinedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    // Navigate to the root; MainApp will switch to Home page via bottom nav
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    // Note: To switch to Home tab, user can tap the Home icon in the bottom nav
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFFBE6992),
@@ -117,34 +126,12 @@ class OrderConfirmationPage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 3, // Orders index
-        onTap: (index) => _handleNavigation(context, index),
-      ),
     );
-  }
-
-  void _handleNavigation(BuildContext context, int index) {
-    if (index == 3) return;
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, '/cart');
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, '/favorites');
-        break;
-      case 4:
-        Navigator.pushReplacementNamed(context, '/profile');
-        break;
-    }
   }
 
   Widget _buildOrderDetails(Order order) {

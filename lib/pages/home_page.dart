@@ -1,11 +1,9 @@
 // lib/pages/home_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../widgets/custom_bottom_navbar.dart';
-import './product_list_page.dart'; // Import the ProductListScreen
-import '../data/products_data.dart'; // Import the products data
+import '../data/products_data.dart';
+import './product_list_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -123,7 +121,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-
           // Popular Categories Section
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -157,7 +154,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
           // Sliding Banner Section (Full Width)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -183,13 +179,11 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-
           // Divider for Visual Separation
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Divider(color: Colors.grey[200]!, thickness: 1),
           ),
-
           // Top Deals Section
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -222,7 +216,6 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
           // Normal Banner Section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -248,13 +241,11 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-
           // Divider for Visual Separation
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Divider(color: Colors.grey[200]!, thickness: 1),
           ),
-
           // Products with Price Section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -278,7 +269,7 @@ class HomePage extends StatelessWidget {
                       context,
                       product.name,
                       product.image,
-                      '\$${product.price.toStringAsFixed(2)}',
+                      '₹${product.price.toStringAsFixed(2)}',
                       product.id.toString(),
                     );
                   }).toList(),
@@ -286,13 +277,11 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
           // Divider for Visual Separation
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Divider(color: Colors.grey[200]!, thickness: 1),
           ),
-
           // Flash Deals Section
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -325,29 +314,8 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(height: 20),
         ],
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) return;
-          switch (index) {
-            case 1:
-              Navigator.pushReplacementNamed(context, '/cart');
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/favorites');
-              break;
-            case 3:
-              Navigator.pushReplacementNamed(context, '/orders');
-              break;
-            case 4:
-              Navigator.pushReplacementNamed(context, '/profile');
-              break;
-          }
-        },
       ),
     );
   }
@@ -522,7 +490,6 @@ class HomePage extends StatelessWidget {
   Widget _buildProductCard(BuildContext context, String name, String imagePath, String price, String productId) {
     return GestureDetector(
       onTap: () {
-        // Navigate to product details
         Navigator.pushNamed(
           context,
           '/product-details',
