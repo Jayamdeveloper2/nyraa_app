@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../widgets/custom_bottom_navbar.dart';
 import './product_list_page.dart'; // Import the ProductListScreen
 import '../data/products_data.dart'; // Import the products data
 
@@ -328,113 +329,25 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 20),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: const Color(0xFFBE6992),
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        elevation: 8,
-        currentIndex: 0, // Home is selected
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: 0,
         onTap: (index) {
+          if (index == 0) return;
           switch (index) {
-            case 0:
-            // Already on home page
-              break;
             case 1:
-            // Navigate to cart
               Navigator.pushReplacementNamed(context, '/cart');
               break;
             case 2:
-            // Navigate to favorites
               Navigator.pushReplacementNamed(context, '/favorites');
               break;
             case 3:
-            // Navigate to orders
               Navigator.pushReplacementNamed(context, '/orders');
               break;
             case 4:
-            // Navigate to profile
               Navigator.pushReplacementNamed(context, '/profile');
               break;
           }
         },
-        items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/home.svg',
-              width: 24,
-              height: 24,
-              color: const Color(0xFFBE6992), // Active color since we're on home
-            ),
-            activeIcon: SvgPicture.asset(
-              'assets/icons/home.svg',
-              width: 24,
-              height: 24,
-              color: const Color(0xFFBE6992),
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/shopping_cart.svg', // Make sure this file exists or use Icons.shopping_cart_outlined
-              width: 24,
-              height: 24,
-              color: Colors.grey,
-            ),
-            activeIcon: SvgPicture.asset(
-              'assets/icons/shopping_cart.svg', // Make sure this file exists or use Icons.shopping_cart
-              width: 24,
-              height: 24,
-              color: const Color(0xFFBE6992),
-            ),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/favourites.svg',
-              width: 24,
-              height: 24,
-              color: Colors.grey,
-            ),
-            activeIcon: SvgPicture.asset(
-              'assets/icons/favourites.svg',
-              width: 24,
-              height: 24,
-              color: const Color(0xFFBE6992),
-            ),
-            label: 'Favourites',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/orders.svg',
-              width: 24,
-              height: 24,
-              color: Colors.grey,
-            ),
-            activeIcon: SvgPicture.asset(
-              'assets/icons/orders.svg',
-              width: 24,
-              height: 24,
-              color: const Color(0xFFBE6992),
-            ),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/profile.svg',
-              width: 24,
-              height: 24,
-              color: Colors.grey,
-            ),
-            activeIcon: SvgPicture.asset(
-              'assets/icons/profile.svg',
-              width: 24,
-              height: 24,
-              color: const Color(0xFFBE6992),
-            ),
-            label: 'You',
-          ),
-        ],
       ),
     );
   }

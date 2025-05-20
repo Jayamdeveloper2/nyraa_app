@@ -1,8 +1,8 @@
 // lib/pages/orders_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import '../data/products_data.dart';
+import '../widgets/custom_bottom_navbar.dart';
 
 class Order {
   final String id;
@@ -44,7 +44,6 @@ class OrdersPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  // Sample orders data
   final List<Order> _orders = [
     Order(
       id: 'OD12345678',
@@ -132,20 +131,37 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
       body: TabBarView(
         controller: _tabController,
         children: [
-          // All Orders
           _buildOrdersList(_orders),
-
-          // Processing Orders
           _buildOrdersList(_orders.where((order) =>
           order.status == 'Processing' || order.status == 'Shipped').toList()),
-
-          // Delivered Orders
           _buildOrdersList(_orders.where((order) =>
           order.status == 'Delivered').toList()),
         ],
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(context, 3),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: 3,
+        onTap: (index) => _handleNavigation(context, index),
+      ),
     );
+  }
+
+  void _handleNavigation(BuildContext context, int index) {
+    if (index == 3) return;
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/cart');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/favorites');
+        break;
+      case 4:
+        Navigator.pushReplacementNamed(context, '/profile');
+        break;
+    }
   }
 
   Widget _buildOrdersList(List<Order> orders) {
@@ -215,7 +231,6 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Order header
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Row(
@@ -259,10 +274,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
                   ],
                 ),
               ),
-
               const Divider(height: 1),
-
-              // Order items
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -334,10 +346,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
                   );
                 },
               ),
-
               const Divider(height: 1),
-
-              // Order total and actions
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -368,9 +377,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
                       children: [
                         Expanded(
                           child: OutlinedButton(
-                            onPressed: () {
-                              // View order details
-                            },
+                            onPressed: () {},
                             style: OutlinedButton.styleFrom(
                               foregroundColor: const Color(0xFFBE6992),
                               side: const BorderSide(color: Color(0xFFBE6992)),
@@ -385,9 +392,7 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              // Track order
-                            },
+                            onPressed: () {},
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFBE6992),
                               foregroundColor: Colors.white,
@@ -428,114 +433,5 @@ class _OrdersPageState extends State<OrdersPage> with SingleTickerProviderStateM
       default:
         return Colors.grey;
     }
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context, int currentIndex) {
-    return BottomNavigationBar(
-      selectedItemColor: const Color(0xFFBE6992),
-      unselectedItemColor: Colors.grey,
-      backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed,
-      elevation: 8,
-      currentIndex: currentIndex,
-      onTap: (index) {
-        if (index == currentIndex) return;
-
-        switch (index) {
-          case 0:
-            Navigator.pushReplacementNamed(context, '/home');
-            break;
-          case 1:
-            Navigator.pushReplacementNamed(context, '/cart');
-            break;
-          case 2:
-            Navigator.pushReplacementNamed(context, '/favorites');
-            break;
-          case 3:
-          // Already on orders page
-            break;
-          case 4:
-            Navigator.pushReplacementNamed(context, '/profile');
-            break;
-        }
-      },
-      items: [
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/home.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/home.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/shopping_cart.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992), // Active color since we're on cart
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/shopping_cart.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Cart',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/favourites.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/favourites.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Favourites',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/orders.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/orders.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Orders',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/profile.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/profile.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'You',
-        ),
-      ],
-    );
   }
 }

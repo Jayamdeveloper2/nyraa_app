@@ -1,10 +1,9 @@
 // lib/pages/cart_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
-import '../buttons/buttons.dart';
+import '../widgets/custom_bottom_navbar.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -30,7 +29,6 @@ class CartPage extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
-                // Show clear cart confirmation
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -66,15 +64,40 @@ class CartPage extends StatelessWidget {
           ? _buildEmptyCart(context)
           : _buildCartContent(context, cartProvider),
       bottomNavigationBar: cartItems.isEmpty
-          ? _buildBottomNavigationBar(context, 1)
+          ? CustomBottomNavBar(
+        currentIndex: 1,
+        onTap: (index) => _handleNavigation(context, index),
+      )
           : Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildCheckoutBar(context, cartProvider),
-          _buildBottomNavigationBar(context, 1),
+          CustomBottomNavBar(
+            currentIndex: 1,
+            onTap: (index) => _handleNavigation(context, index),
+          ),
         ],
       ),
     );
+  }
+
+  void _handleNavigation(BuildContext context, int index) {
+    if (index == 1) return;
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/favorites');
+        break;
+      case 3:
+        Navigator.pushReplacementNamed(context, '/orders');
+        break;
+      case 4:
+        Navigator.pushReplacementNamed(context, '/profile');
+        break;
+    }
   }
 
   Widget _buildEmptyCart(BuildContext context) {
@@ -129,7 +152,6 @@ class CartPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cart items
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -139,8 +161,6 @@ class CartPage extends StatelessWidget {
               return _buildCartItem(context, item, cartProvider);
             },
           ),
-
-          // Coupon code section
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -175,7 +195,6 @@ class CartPage extends StatelessWidget {
                     const SizedBox(width: 12),
                     ElevatedButton(
                       onPressed: () {
-                        // Apply coupon logic
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Coupon applied successfully!'),
@@ -198,8 +217,6 @@ class CartPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Price details
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -241,8 +258,6 @@ class CartPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Delivery address
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -273,9 +288,7 @@ class CartPage extends StatelessWidget {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
-                            // Change address logic
-                          },
+                          onPressed: () {},
                           style: TextButton.styleFrom(
                             foregroundColor: const Color(0xFFBE6992),
                           ),
@@ -312,8 +325,7 @@ class CartPage extends StatelessWidget {
               ),
             ),
           ),
-
-          const SizedBox(height: 80), // Space for bottom bar
+          const SizedBox(height: 80),
         ],
       ),
     );
@@ -337,7 +349,6 @@ class CartPage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product image
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.asset(
@@ -348,7 +359,6 @@ class CartPage extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-            // Product details
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,7 +429,6 @@ class CartPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Quantity selector
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey[300]!),
@@ -439,7 +448,6 @@ class CartPage extends StatelessWidget {
                                     ),
                                   );
                                 } else {
-                                  // Show confirmation dialog when quantity is 1
                                   showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
@@ -503,10 +511,8 @@ class CartPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // Remove button
                       TextButton(
                         onPressed: () {
-                          // Show remove confirmation dialog
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -619,7 +625,6 @@ class CartPage extends StatelessWidget {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                // Proceed to checkout with confirmation
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -668,115 +673,6 @@ class CartPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context, int currentIndex) {
-    return BottomNavigationBar(
-      selectedItemColor: const Color(0xFFBE6992),
-      unselectedItemColor: Colors.grey,
-      backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed,
-      elevation: 8,
-      currentIndex: currentIndex,
-      onTap: (index) {
-        if (index == currentIndex) return;
-
-        switch (index) {
-          case 0:
-            Navigator.pushReplacementNamed(context, '/home');
-            break;
-          case 1:
-          // Already on cart page
-            break;
-          case 2:
-            Navigator.pushReplacementNamed(context, '/favorites');
-            break;
-          case 3:
-            Navigator.pushReplacementNamed(context, '/orders');
-            break;
-          case 4:
-            Navigator.pushReplacementNamed(context, '/profile');
-            break;
-        }
-      },
-      items: [
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/home.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/home.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/shopping_cart.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992), // Active color since we're on cart
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/shopping_cart.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Cart',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/favourites.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/favourites.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Favourites',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/orders.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/orders.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'Orders',
-        ),
-        BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/profile.svg',
-            width: 24,
-            height: 24,
-            color: Colors.grey,
-          ),
-          activeIcon: SvgPicture.asset(
-            'assets/icons/profile.svg',
-            width: 24,
-            height: 24,
-            color: const Color(0xFFBE6992),
-          ),
-          label: 'You',
-        ),
-      ],
     );
   }
 }

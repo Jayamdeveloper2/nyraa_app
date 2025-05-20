@@ -1,30 +1,56 @@
 // lib/providers/favorites_provider.dart
-
 import 'package:flutter/foundation.dart';
 import '../data/products_data.dart';
+import '../services/shared_prefs_service.dart';
 
 class FavoritesProvider with ChangeNotifier {
-  final List<Product> _favorites = [];
+  List<Product> _items = [];
+  bool _isLoading = true;
 
-  List<Product> get items => [..._favorites];
+  FavoritesProvider() {
+    _loadFavoriteItems();
+  }
+
+  Future<void> _loadFavoriteItems() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _items = await SharedPrefsService.loadFavoriteItems();
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  List<Product> get items => _items;
+  bool get isLoading => _isLoading;
 
   bool isFavorite(int productId) {
-    return _favorites.any((product) => product.id == productId);
+    return _items.any((item) => item.id == productId);
   }
 
   void toggleFavorite(Product product) {
-    final isExisting = _favorites.any((p) => p.id == product.id);
-
-    if (isExisting) {
-      _favorites.removeWhere((p) => p.id == product.id);
+    if (isFavorite(product.id)) {
+      removeFromFavorites(product.id);
     } else {
-      _favorites.add(product);
+      addToFavorites(product);
     }
-    notifyListeners();
+  }
+
+  void addToFavorites(Product product) {
+    if (!isFavorite(product.id)) {
+      _items.add(product);
+      _saveFavoriteItems();
+      notifyListeners();
+    }
   }
 
   void removeFromFavorites(int productId) {
-    _favorites.removeWhere((product) => product.id == productId);
+    _items.removeWhere((item) => item.id == productId);
+    _saveFavoriteItems();
     notifyListeners();
+  }
+
+  Future<void> _saveFavoriteItems() async {
+    await SharedPrefsService.saveFavoriteItems(_items);
   }
 }
