@@ -8,6 +8,7 @@ import '../buttons/buttons.dart'; // Import the buttons (AddToCartButton)
 import '../pages/product_details_page.dart';
 import '../providers/favorites_provider.dart';
 import '../providers/cart_provider.dart';
+import '../widgets/custom_bottom_navbar.dart'; // Import the custom bottom navbar
 
 class ProductListScreen extends StatefulWidget {
   final String? category;
@@ -574,66 +575,30 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(context, 0),
-    );
-  }
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: 0,
+        onTap: (index) {
+          if (index == 0) return; // Prevent re-navigation to current page
 
-  Widget _buildBottomNavigationBar(BuildContext context, int currentIndex) {
-    return BottomNavigationBar(
-      selectedItemColor: const Color(0xFFBE6992),
-      unselectedItemColor: Colors.grey,
-      backgroundColor: Colors.white,
-      type: BottomNavigationBarType.fixed,
-      elevation: 8,
-      currentIndex: currentIndex,
-      onTap: (index) {
-        if (index == currentIndex) return;
-
-        switch (index) {
-          case 0:
-            Navigator.pushReplacementNamed(context, '/home');
-            break;
-          case 1:
-            Navigator.pushReplacementNamed(context, '/cart');
-            break;
-          case 2:
-            Navigator.pushReplacementNamed(context, '/favorites');
-            break;
-          case 3:
-            Navigator.pushReplacementNamed(context, '/orders');
-            break;
-          case 4:
-            Navigator.pushReplacementNamed(context, '/profile');
-            break;
-        }
-      },
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_cart_outlined),
-          activeIcon: Icon(Icons.shopping_cart),
-          label: 'Cart',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border_outlined),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Favorites',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.list_alt_outlined),
-          activeIcon: Icon(Icons.list_alt),
-          label: 'Orders',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
+          switch (index) {
+            case 0:
+              Navigator.pushReplacementNamed(context, '/home');
+              break;
+            case 1:
+              Navigator.pushReplacementNamed(context, '/cart');
+              break;
+            case 2:
+              Navigator.pushReplacementNamed(context, '/favorites');
+              break;
+            case 3:
+              Navigator.pushReplacementNamed(context, '/orders');
+              break;
+            case 4:
+              Navigator.pushReplacementNamed(context, '/profile');
+              break;
+          }
+        },
+      ),
     );
   }
 }
