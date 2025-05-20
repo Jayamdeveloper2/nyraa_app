@@ -75,7 +75,7 @@ class OrderConfirmationPage extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/orders');
+                    Navigator.pushReplacementNamed(context, '/order-confirmation');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFBE6992),
