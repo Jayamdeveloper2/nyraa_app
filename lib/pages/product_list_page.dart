@@ -1,8 +1,13 @@
+// lib/pages/product_list_page.dart
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../data/products_data.dart'; // Import the product data
 import 'filter_section.dart'; // Import the filter section
 import '../buttons/buttons.dart'; // Import the buttons (AddToCartButton)
 import '../pages/product_details_page.dart';
+import '../providers/favorites_provider.dart';
+import '../providers/cart_provider.dart';
 
 class ProductListScreen extends StatefulWidget {
   final String? category;
@@ -116,6 +121,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.grey[50], // Match HomePage background
       appBar: AppBar(
@@ -174,7 +182,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               size: 28,
             ),
             onPressed: () {
-              // Navigate to cart
+              Navigator.pushReplacementNamed(context, '/cart');
             },
           ),
         ],
@@ -310,6 +318,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   itemCount: filteredProducts.length,
                   itemBuilder: (context, index) {
                     final product = filteredProducts[index];
+                    final bool isFavorite = favoritesProvider.isFavorite(product.id);
+
                     return GestureDetector(
                       onTap: () {
                         // Navigate to product details
@@ -386,7 +396,46 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                     right: 8,
                                     child: GestureDetector(
                                       onTap: () {
-                                        // Add to wishlist
+                                        // Toggle favorite status
+                                        if (isFavorite) {
+                                          // Show confirmation dialog
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title: const Text('Remove from Favorites'),
+                                              content: Text('Are you sure you want to remove ${product.name} from your favorites?'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () => Navigator.pop(context),
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    favoritesProvider.removeFromFavorites(product.id);
+                                                    Navigator.pop(context);
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text('Removed from favorites'),
+                                                        backgroundColor: Color(0xFFBE6992),
+                                                        duration: Duration(seconds: 1),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: const Text('Remove', style: TextStyle(color: Colors.red)),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        } else {
+                                          favoritesProvider.toggleFavorite(product);
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Added to favorites'),
+                                              backgroundColor: Color(0xFFBE6992),
+                                              duration: Duration(seconds: 1),
+                                            ),
+                                          );
+                                        }
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(6),
@@ -401,9 +450,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             ),
                                           ],
                                         ),
-                                        child: const Icon(
-                                          Icons.favorite_border,
-                                          color: Colors.grey,
+                                        child: Icon(
+                                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                                          color: isFavorite ? const Color(0xFFBE6992) : Colors.grey,
                                           size: 20,
                                         ),
                                       ),
@@ -503,7 +552,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ),
                             AddToCartButton(
                               onPressed: () {
-                                // Add to cart logic here
+                                // Add to cart logic
+                                cartProvider.addItem(product);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Added to cart!'),
+                                    backgroundColor: Color(0xFFBE6992),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
                               },
                             ),
                           ],
@@ -517,6 +574,66 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: _buildBottomNavigationBar(context, 0),
+    );
+  }
+
+  Widget _buildBottomNavigationBar(BuildContext context, int currentIndex) {
+    return BottomNavigationBar(
+      selectedItemColor: const Color(0xFFBE6992),
+      unselectedItemColor: Colors.grey,
+      backgroundColor: Colors.white,
+      type: BottomNavigationBarType.fixed,
+      elevation: 8,
+      currentIndex: currentIndex,
+      onTap: (index) {
+        if (index == currentIndex) return;
+
+        switch (index) {
+          case 0:
+            Navigator.pushReplacementNamed(context, '/home');
+            break;
+          case 1:
+            Navigator.pushReplacementNamed(context, '/cart');
+            break;
+          case 2:
+            Navigator.pushReplacementNamed(context, '/favorites');
+            break;
+          case 3:
+            Navigator.pushReplacementNamed(context, '/orders');
+            break;
+          case 4:
+            Navigator.pushReplacementNamed(context, '/profile');
+            break;
+        }
+      },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          activeIcon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.shopping_cart_outlined),
+          activeIcon: Icon(Icons.shopping_cart),
+          label: 'Cart',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite_border_outlined),
+          activeIcon: Icon(Icons.favorite),
+          label: 'Favorites',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.list_alt_outlined),
+          activeIcon: Icon(Icons.list_alt),
+          label: 'Orders',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_outline),
+          activeIcon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ],
     );
   }
 }

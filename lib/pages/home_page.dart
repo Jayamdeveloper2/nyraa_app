@@ -1,3 +1,5 @@
+// lib/pages/home_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -272,9 +274,11 @@ class HomePage extends StatelessWidget {
                   childAspectRatio: 0.7,
                   children: allProducts.take(4).map((product) {
                     return _buildProductCard(
+                      context,
                       product.name,
                       product.image,
                       '\$${product.price.toStringAsFixed(2)}',
+                      product.id.toString(),
                     );
                   }).toList(),
                 ),
@@ -330,13 +334,37 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
+        currentIndex: 0, // Home is selected
+        onTap: (index) {
+          switch (index) {
+            case 0:
+            // Already on home page
+              break;
+            case 1:
+            // Navigate to cart
+              Navigator.pushReplacementNamed(context, '/cart');
+              break;
+            case 2:
+            // Navigate to favorites
+              Navigator.pushReplacementNamed(context, '/favorites');
+              break;
+            case 3:
+            // Navigate to orders
+              Navigator.pushReplacementNamed(context, '/orders');
+              break;
+            case 4:
+            // Navigate to profile
+              Navigator.pushReplacementNamed(context, '/profile');
+              break;
+          }
+        },
         items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/home.svg',
               width: 24,
               height: 24,
-              color: Colors.grey,
+              color: const Color(0xFFBE6992), // Active color since we're on home
             ),
             activeIcon: SvgPicture.asset(
               'assets/icons/home.svg',
@@ -348,18 +376,18 @@ class HomePage extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              'assets/icons/category.svg',
+              'assets/icons/shopping_cart.svg', // Make sure this file exists or use Icons.shopping_cart_outlined
               width: 24,
               height: 24,
               color: Colors.grey,
             ),
             activeIcon: SvgPicture.asset(
-              'assets/icons/category.svg',
+              'assets/icons/shopping_cart.svg', // Make sure this file exists or use Icons.shopping_cart
               width: 24,
               height: 24,
               color: const Color(0xFFBE6992),
             ),
-            label: 'Category',
+            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -578,45 +606,55 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProductCard(String name, String imagePath, String price) {
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey[200]!),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey[200]!,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage(imagePath),
-                  fit: BoxFit.cover,
+  Widget _buildProductCard(BuildContext context, String name, String imagePath, String price, String productId) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to product details
+        Navigator.pushNamed(
+          context,
+          '/product-details',
+          arguments: {'productId': productId},
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey[200]!),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[200]!,
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: AssetImage(imagePath),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            name,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-          ),
-          Text(
-            price,
-            style: const TextStyle(fontSize: 14, color: Color(0xFFBE6992), fontWeight: FontWeight.w500),
-          ),
-        ],
+            const SizedBox(height: 6),
+            Text(
+              name,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            ),
+            Text(
+              price,
+              style: const TextStyle(fontSize: 14, color: Color(0xFFBE6992), fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
       ),
     );
   }
