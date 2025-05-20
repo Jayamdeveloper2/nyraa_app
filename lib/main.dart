@@ -8,6 +8,7 @@ import 'pages/orders_page.dart';
 import 'pages/profile_page.dart';
 import 'pages/checkout_page.dart';
 import 'pages/order_confirmation_page.dart';
+import 'pages/product_details_page.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/order_provider.dart';
@@ -50,6 +51,13 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (context) => OrderConfirmationPage(
                 orderId: args['orderId'],
+              ),
+            );
+          } else if (settings.name == '/product-details') {
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (context) => ProductDetailsPage(
+                productId: args['productId'],
               ),
             );
           }
