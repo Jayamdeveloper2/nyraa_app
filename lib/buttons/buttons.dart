@@ -1,7 +1,7 @@
+// lib/buttons/buttons.dart
 import 'package:flutter/material.dart';
-import '../pages/cart_page.dart'; // Import the cart page
+import '../pages/cart_page.dart';
 
-// Add to Cart Button
 class AddToCartButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
@@ -11,7 +11,6 @@ class AddToCartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed ?? () {
-        // Navigate to cart page if no custom onPressed is provided
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const CartPage()),
@@ -19,10 +18,11 @@ class AddToCartButton extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        height: 36, // Reduced from 40
-        decoration: const BoxDecoration(
-          color: Color(0xFFBE6992),
-          borderRadius: BorderRadius.zero, // Removed border radius
+        height: 36,
+        decoration: BoxDecoration(
+          color: const Color(0xFFBE6992),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFBE6992), width: 1.5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +48,6 @@ class AddToCartButton extends StatelessWidget {
   }
 }
 
-// Buy Now Button
 class BuyNowButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -60,10 +59,11 @@ class BuyNowButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
-        height: 48,
-        decoration: const BoxDecoration(
-          color: Color(0xFFBE6992),
-          borderRadius: BorderRadius.zero, // No border radius
+        height: 36,
+        decoration: BoxDecoration(
+          color: const Color(0xFFBE6992),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFBE6992), width: 1.5),
         ),
         child: const Center(
           child: Text(
@@ -71,7 +71,7 @@ class BuyNowButton extends StatelessWidget {
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w600,
-              fontSize: 16,
+              fontSize: 14,
             ),
           ),
         ),
@@ -80,7 +80,6 @@ class BuyNowButton extends StatelessWidget {
   }
 }
 
-// Apply Button for Filter Section
 class ApplyButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -106,6 +105,52 @@ class ApplyButton extends StatelessWidget {
               fontSize: 16,
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class GoToCartButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const GoToCartButton({super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed ?? () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CartPage()),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 36,
+        decoration: BoxDecoration(
+          color: const Color(0xFFBE6992),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFBE6992), width: 1.5),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(
+              Icons.shopping_cart_outlined,
+              color: Colors.white,
+              size: 18,
+            ),
+            SizedBox(width: 8),
+            Text(
+              'Go to Cart',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ],
         ),
       ),
     );

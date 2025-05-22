@@ -1,7 +1,10 @@
-// Product model class with only a single image and topic
+// lib/data/products_data.dart
+
+// Product model class with multiple images and specification/about fields
 class Product {
   final int id;
-  final String image; // Only one image field
+  final String image; // Primary image
+  final List<String> images; // Multiple images
   final String name;
   final double originalPrice;
   final double price;
@@ -18,11 +21,14 @@ class Product {
   final int reviewCount;
   final String sku;
   final String vendor;
-  final String topic; // Field for topic
+  final String topic;
+  final Map<String, String> specifications; // Specification details
+  final String about; // About description
 
   Product({
     required this.id,
     required this.image,
+    required this.images,
     required this.name,
     required this.originalPrice,
     required this.price,
@@ -40,14 +46,16 @@ class Product {
     required this.sku,
     required this.vendor,
     required this.topic,
+    required this.specifications,
+    required this.about,
   });
 }
 
 // CategoryImage model class
 class CategoryImage {
   final int id;
-  final String name; // Category name (e.g., Dresses)
-  final String image; // Image URL or path
+  final String name;
+  final String image;
 
   CategoryImage({
     required this.id,
@@ -59,9 +67,9 @@ class CategoryImage {
 // TopDeal model class
 class TopDeal {
   final int id;
-  final String name; // Product name
-  final String image; // Image URL or path
-  final String topic; // Topic (e.g., Winter Wear)
+  final String name;
+  final String image;
+  final String topic;
 
   TopDeal({
     required this.id,
@@ -74,9 +82,9 @@ class TopDeal {
 // FlashSale model class
 class FlashSale {
   final int id;
-  final String name; // Product name
-  final String image; // Image URL or path
-  final int discount; // Discount percentage
+  final String name;
+  final String image;
+  final int discount;
 
   FlashSale({
     required this.id,
@@ -86,11 +94,18 @@ class FlashSale {
   });
 }
 
-// Product data with single image per product and topic
+// Product data with multiple images, specifications, and about
 final List<Product> allProducts = [
   Product(
     id: 1,
     image: "assets/images/productlist/product1.jpg",
+    images: [
+      "assets/images/productlist/product1.jpg",
+      "assets/images/productlist/product2.jpg",
+      "assets/images/productlist/product3.jpg",
+      "assets/images/productlist/product4.jpg",
+      "assets/images/productlist/product5.jpg",
+    ],
     name: "Elegant Rose Gold Dress",
     originalPrice: 79.0,
     price: 72.0,
@@ -108,10 +123,25 @@ final List<Product> allProducts = [
     sku: "ERGD-001",
     vendor: "ModaVibe Collections",
     topic: "Festive Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Rose Gold',
+      'Fabric': 'Silk',
+      'Type': 'One Piece',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Elevate your style with this Elegant Rose Gold Dress, crafted from premium silk for comfort and durability. Its elegant design is perfect for formal or casual occasions. Easy to care for: dry clean only.",
   ),
   Product(
     id: 2,
-    image: "./assets/images/productlist/product2.jpg",
+    image: "assets/images/productlist/product2.jpg",
+    images: [
+      "assets/images/productlist/product2.jpg",
+      "assets/images/productlist/product3.jpg",
+      "assets/images/productlist/product4.jpg",
+      "assets/images/productlist/product5.jpg",
+      "assets/images/productlist/product6.jpg",
+    ],
     name: "Chic Summer Dress",
     originalPrice: 150.0,
     price: 140.0,
@@ -129,10 +159,25 @@ final List<Product> allProducts = [
     vendor: "ChicNest Collections",
     reviewCount: 90,
     topic: "Party Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'White',
+      'Fabric': 'Cotton',
+      'Type': 'One Piece',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Elevate your style with this Chic Summer Dress, crafted from premium cotton for comfort and durability. Its modern design is perfect for everyday or professional settings. Easy to care for: machine wash cold, tumble dry low.",
   ),
   Product(
     id: 3,
     image: "assets/images/productlist/product3.jpg",
+    images: [
+      "assets/images/productlist/product3.jpg",
+      "assets/images/productlist/product4.jpg",
+      "assets/images/productlist/product5.jpg",
+      "assets/images/productlist/product6.jpg",
+      "assets/images/productlist/product7.jpg",
+    ],
     name: "Floral Maxi Dress",
     originalPrice: 95.0,
     price: 90.0,
@@ -150,10 +195,25 @@ final List<Product> allProducts = [
     vendor: "ModaVibe Collections",
     reviewCount: 80,
     topic: "Fashion Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Multicolor',
+      'Fabric': 'Chiffon',
+      'Type': 'One Piece',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Elevate your style with this Floral Maxi Dress, crafted from premium chiffon for comfort and durability. Its bohemian design is perfect for formal or casual occasions. Easy to care for: hand wash, lay flat to dry.",
   ),
   Product(
     id: 4,
     image: "assets/images/productlist/product4.jpg",
+    images: [
+      "assets/images/productlist/product4.jpg",
+      "assets/images/productlist/product5.jpg",
+      "assets/images/productlist/product6.jpg",
+      "assets/images/productlist/product7.jpg",
+      "assets/images/productlist/product8.jpg",
+    ],
     name: "Classic Yellow Top",
     originalPrice: 250.0,
     price: 250.0,
@@ -171,10 +231,25 @@ final List<Product> allProducts = [
     vendor: "TrendMuse Collections",
     reviewCount: 85,
     topic: "Casual Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Yellow',
+      'Fabric': 'Cotton',
+      'Type': 'One Piece',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Elevate your style with this Classic Yellow Top, crafted from premium cotton for comfort and durability. Its classic design is perfect for everyday or professional settings. Easy to care for: machine wash cold, tumble dry low.",
   ),
   Product(
     id: 5,
     image: "assets/images/productlist/product5.jpg",
+    images: [
+      "assets/images/productlist/product5.jpg",
+      "assets/images/productlist/product6.jpg",
+      "assets/images/productlist/product7.jpg",
+      "assets/images/productlist/product8.jpg",
+      "assets/images/productlist/product9.jpg",
+    ],
     name: "Casual Denim Shirt",
     originalPrice: 90.0,
     price: 85.0,
@@ -192,270 +267,225 @@ final List<Product> allProducts = [
     vendor: "GlamCove Collections",
     reviewCount: 95,
     topic: "Casual Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Blue',
+      'Fabric': 'Denim',
+      'Type': 'One Piece',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Elevate your style with this Casual Denim Shirt, crafted from premium denim for comfort and durability. Its casual design is perfect for everyday or professional settings. Easy to care for: machine wash cold, tumble dry low.",
   ),
   Product(
     id: 6,
     image: "assets/images/productlist/product6.jpg",
-    name: "Sleeveless Crop Top",
-    originalPrice: 60.0,
-    price: 55.0,
-    rating: 3.0,
-    discount: 8,
-    description: "Elevate your style with this Sleeveless Crop Top, crafted from premium cotton for comfort and durability. Its modern design is perfect for everyday or professional settings. Easy to care for: machine wash cold, tumble dry low.",
-    size: "S",
+    images: [
+      "assets/images/productlist/product6.jpg",
+      "assets/images/productlist/product7.jpg",
+      "assets/images/productlist/product8.jpg",
+      "assets/images/productlist/product9.jpg",
+      "assets/images/productlist/product10jpg",
+    ],
+    name: "Leather Jacket",
+    originalPrice: 200.0,
+    price: 180.0,
+    rating: 4.5,
+    discount: 10,
+    description: "Stay stylish with this Leather Jacket, crafted from premium leather for durability and comfort. Perfect for cool weather or a night out. Easy to care for: professional leather cleaning.",
+    size: "L",
     style: "modern",
-    material: "Cotton",
-    brand: "EvoCouture",
+    material: "Leather",
+    brand: "TrendMuse",
     availability: "In Stock",
-    color: "Red",
-    category: "tops",
-    sku: "SCT-006",
-    vendor: "EvoCouture Collections",
-    reviewCount: 75,
-    topic: "Fashion Wear",
+    color: "Black",
+    category: "jackets",
+    sku: "LJ-006",
+    vendor: "TrendMuse Collections",
+    reviewCount: 110,
+    topic: "Winter Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Black',
+      'Fabric': 'Leather',
+      'Type': 'Jacket',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Stay stylish with this Leather Jacket, crafted from premium leather for durability and comfort. Perfect for cool weather or a night out. Easy to care for: professional leather cleaning.",
   ),
   Product(
     id: 7,
     image: "assets/images/productlist/product7.jpg",
-    name: "Linen Trousers",
-    originalPrice: 110.0,
-    price: 105.0,
-    rating: 4.0,
-    discount: 5,
-    description: "Elevate your style with this Linen Trousers, crafted from premium linen for comfort and durability. Its casual design is perfect for work or leisure. Easy to care for: hand wash, lay flat to dry.",
-    size: "L",
+    images: [
+      "assets/images/productlist/product7.jpg",
+      "assets/images/productlist/product8.jpg",
+      "assets/images/productlist/product9.jpg",
+      "assets/images/productlist/product10.jpg",
+      "assets/images/productlist/product1.jpg",
+    ],
+    name: "High-Waist Jeans",
+    originalPrice: 70.0,
+    price: 65.0,
+    rating: 4.2,
+    discount: 7,
+    description: "Upgrade your wardrobe with these High-Waist Jeans, crafted from premium denim for comfort and durability. Perfect for casual or semi-formal looks. Easy to care for: machine wash cold, tumble dry low.",
+    size: "S",
     style: "casual",
-    material: "Linen",
-    brand: "CoutureBloom",
+    material: "Denim",
+    brand: "GlamCove",
     availability: "In Stock",
-    color: "Beige",
+    color: "Dark Blue",
     category: "pants",
-    sku: "LT-007",
-    vendor: "CoutureBloom Collections",
-    reviewCount: 65,
+    sku: "HWJ-007",
+    vendor: "GlamCove Collections",
+    reviewCount: 75,
     topic: "Casual Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Dark Blue',
+      'Fabric': 'Denim',
+      'Type': 'Jeans',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Upgrade your wardrobe with these High-Waist Jeans, crafted from premium denim for comfort and durability. Perfect for casual or semi-formal looks. Easy to care for: machine wash cold, tumble dry low.",
   ),
   Product(
     id: 8,
     image: "assets/images/productlist/product8.jpg",
-    name: "Tailored Trousers",
-    originalPrice: 130.0,
-    price: 125.0,
-    rating: 4.0,
-    discount: 4,
-    description: "Elevate your style with this Tailored Trousers, crafted from premium wool for comfort and durability. Its formal design is perfect for work or leisure. Easy to care for: dry clean only.",
-    size: "M",
-    style: "formal",
-    material: "Wool",
-    brand: "ModaVibe",
+    images: [
+      "assets/images/productlist/product8.jpg",
+      "assets/images/productlist/product9.jpg",
+      "assets/images/productlist/product10.jpg",
+      "assets/images/productlist/product1.jpg",
+      "assets/images/productlist/product2.jpg",
+    ],
+    name: "Silk Scarf",
+    originalPrice: 45.0,
+    price: 40.0,
+    rating: 4.8,
+    discount: 11,
+    description: "Add elegance with this Silk Scarf, crafted from premium silk for a luxurious feel. Perfect for accessorizing any outfit. Easy to care for: hand wash, lay flat to dry.",
+    size: "One Size",
+    style: "elegant",
+    material: "Silk",
+    brand: "ChicNest",
     availability: "In Stock",
-    color: "Grey",
-    category: "pants",
-    sku: "TT-008",
-    vendor: "ModaVibe Collections",
-    reviewCount: 70,
-    topic: "Western Wear",
+    color: "Red",
+    category: "accessories",
+    sku: "SS-008",
+    vendor: "ChicNest Collections",
+    reviewCount: 60,
+    topic: "Fashion Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Red',
+      'Fabric': 'Silk',
+      'Type': 'Scarf',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Add elegance with this Silk Scarf, crafted from premium silk for a luxurious feel. Perfect for accessorizing any outfit. Easy to care for: hand wash, lay flat to dry.",
   ),
   Product(
     id: 9,
     image: "assets/images/productlist/product9.jpg",
-    name: "High-Waisted Jeans",
-    originalPrice: 100.0,
-    price: 95.0,
-    rating: 4.0,
-    discount: 5,
-    description: "Elevate your style with this High-Waisted Jeans, crafted from premium denim for comfort and durability. Its casual design is perfect for work or leisure. Easy to care for: machine wash cold, tumble dry low.",
-    size: "S",
-    style: "casual",
-    material: "Denim",
-    brand: "LuxeMint",
+    images: [
+      "assets/images/productlist/product9.jpg",
+      "assets/images/productlist/product10.jpg",
+      "assets/images/productlist/product1.jpg",
+      "assets/images/productlist/product2.jpg",
+      "assets/images/productlist/product3.jpg",
+    ],
+    name: "A-Line Skirt",
+    originalPrice: 60.0,
+    price: 55.0,
+    rating: 4.3,
+    discount: 8,
+    description: "Look chic with this A-Line Skirt, crafted from premium cotton blend for comfort and durability. Perfect for casual or professional settings. Easy to care for: machine wash cold, tumble dry low.",
+    size: "M",
+    style: "classic",
+    material: "Cotton Blend",
+    brand: "ModaVibe",
     availability: "In Stock",
-    color: "Blue",
-    category: "pants",
-    sku: "HWJ-009",
-    vendor: "LuxeMint Collections",
-    reviewCount: 80,
-    topic: "Western Wear",
+    color: "Navy",
+    category: "skirts",
+    sku: "ALS-009",
+    vendor: "ModaVibe Collections",
+    reviewCount: 70,
+    topic: "Casual Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Navy',
+      'Fabric': 'Cotton Blend',
+      'Type': 'Skirt',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Look chic with this A-Line Skirt, crafted from premium cotton blend for comfort and durability. Perfect for casual or professional settings. Easy to care for: machine wash cold, tumble dry low.",
   ),
   Product(
     id: 10,
     image: "assets/images/productlist/product10.jpg",
-    name: "Leather Jacket",
-    originalPrice: 220.0,
-    price: 200.0,
-    rating: 5.0,
-    discount: 9,
-    description: "Elevate your style with this Leather Jacket, crafted from premium leather for comfort and durability. Its modern design is perfect for cooler days or bold looks. Easy to care for: wipe clean with a damp cloth.",
-    size: "L",
-    style: "modern",
-    material: "Leather",
-    brand: "ModaVibe",
-    availability: "In Stock",
-    color: "Black",
-    category: "jackets",
-    sku: "LJ-010",
-    vendor: "ModaVibe Collections",
-    reviewCount: 70,
-    topic: "Winter Wear",
-  ),
-  Product(
-    id: 11,
-    image: "assets/images/productlist/product5.jpg",
-    name: "Denim Jacket",
-    originalPrice: 150.0,
-    price: 140.0,
-    rating: 4.0,
-    discount: 7,
-    description: "Elevate your style with this Denim Jacket, crafted from premium denim for comfort and durability. Its casual design is perfect for cooler days or bold looks. Easy to care for: machine wash cold, tumble dry low.",
-    size: "S",
-    style: "casual",
-    material: "Denim",
-    brand: "Fashnory",
-    availability: "In Stock",
-    color: "Blue",
-    category: "jackets",
-    sku: "DJ-011",
-    vendor: "Fashnory Collections",
-    reviewCount: 75,
-    topic: "Western Wear",
-  ),
-  Product(
-    id: 12,
-    image: "assets/images/productlist/product2.jpg",
+    images: [
+      "assets/images/productlist/product10.jpg",
+      "assets/images/productlist/product1.jpg",
+      "assets/images/productlist/product2.jpg",
+      "assets/images/productlist/product3.jpg",
+      "assets/images/productlist/product4.jpg",
+    ],
     name: "Quilted Bomber Jacket",
-    originalPrice: 180.0,
-    price: 170.0,
-    rating: 4.0,
-    discount: 6,
-    description: "Elevate your style with this Quilted Bomber Jacket, crafted from premium polyester for comfort and durability. Its casual design is perfect for cooler days or bold looks. Easy to care for: machine wash cold, tumble dry low.",
+    originalPrice: 120.0,
+    price: 110.0,
+    rating: 4.6,
+    discount: 8,
+    description: "Stay warm and stylish with this Quilted Bomber Jacket, crafted from premium polyester for comfort and durability. Perfect for casual outings or cool weather. Easy to care for: machine wash cold, tumble dry low.",
     size: "M",
     style: "casual",
     material: "Polyester",
-    brand: "ModaVibe",
+    brand: "GlamCove",
     availability: "In Stock",
     color: "Green",
     category: "jackets",
-    sku: "QBJ-012",
-    vendor: "ModaVibe Collections",
-    reviewCount: 60,
+    sku: "QBJ-010",
+    vendor: "GlamCove Collections",
+    reviewCount: 100,
     topic: "Winter Wear",
+    specifications: {
+      'Quantity': '1',
+      'Color': 'Green',
+      'Fabric': 'Polyester',
+      'Type': 'Jacket',
+      'Detail': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.',
+    },
+    about: "Stay warm and stylish with this Quilted Bomber Jacket, crafted from premium polyester for comfort and durability. Perfect for casual outings or cool weather. Easy to care for: machine wash cold, tumble dry low.",
   ),
 ];
 
-// Category images list with objects
+// Category images list
 final List<CategoryImage> categoryImages = [
-  CategoryImage(
-    id: 1,
-    name: "Dresses",
-    image: "assets/images/category/category1.jpg",
-  ),
-  CategoryImage(
-    id: 2,
-    name: "Tops",
-    image: "assets/images/category/category4.jpg",
-  ),
-  CategoryImage(
-    id: 3,
-    name: "Pants",
-    image: "assets/images/category/category5.jpg",
-  ),
-  CategoryImage(
-    id: 4,
-    name: "Jackets",
-    image: "assets/images/category/category3.jpg",
-  ),
-  CategoryImage(
-    id: 5,
-    name: "Skirts",
-    image: "assets/images/category/category6.jpg",
-  ),
-  CategoryImage(
-    id: 6,
-    name: "Accessories",
-    image: "assets/images/category/category2.jpg",
-  ),
+  CategoryImage(id: 1, name: "Dresses", image: "assets/images/category/category1.jpg"),
+  CategoryImage(id: 2, name: "Tops", image: "assets/images/category/category4.jpg"),
+  CategoryImage(id: 3, name: "Pants", image: "assets/images/category/category5.jpg"),
+  CategoryImage(id: 4, name: "Jackets", image: "assets/images/category/category3.jpg"),
+  CategoryImage(id: 5, name: "Skirts", image: "assets/images/category/category6.jpg"),
+  CategoryImage(id: 6, name: "Accessories", image: "assets/images/category/category2.jpg"),
 ];
 
-// Top deals list with objects
+// Top deals list
 final List<TopDeal> topDeals = [
-  TopDeal(
-    id: 1,
-    name: "Leather Jacket",
-    image: "assets/images/topdeals/product1.jpg",
-    topic: "Winter Wear",
-  ),
-  TopDeal(
-    id: 2,
-    name: "Elegant Rose Gold Dress",
-    image: "assets/images/topdeals/product2.jpg",
-    topic: "Festive Wear",
-  ),
-  TopDeal(
-    id: 3,
-    name: "Floral Maxi Dress", 
-    image: "assets/images/topdeals/product3.jpg",
-    topic: "Fashion Wear",
-  ),
-  TopDeal(
-    id: 4,
-    name: "Denim Jacket",
-    image: "assets/images/topdeals/product4.jpg",
-    topic: "Western Wear",
-  ),
-  TopDeal(
-    id: 5,
-    name: "Casual Denim Shirt",
-    image: "assets/images/topdeals/product5.jpg",
-    topic: "Casual Wear",
-  ),
-  TopDeal(
-    id: 6,
-    name: "Chic Summer Dress",
-    image: "assets/images/topdeals/product6.jpg",
-    topic: "Party Wear",
-  ),
+  TopDeal(id: 1, name: "Leather Jacket", image: "assets/images/topdeals/product1.jpg", topic: "Winter Wear"),
+  TopDeal(id: 2, name: "Elegant Rose Gold Dress", image: "assets/images/topdeals/product2.jpg", topic: "Festive Wear"),
+  TopDeal(id: 3, name: "Floral Maxi Dress", image: "assets/images/topdeals/product3.jpg", topic: "Fashion Wear"),
+  TopDeal(id: 4, name: "Denim Jacket", image: "assets/images/topdeals/product4.jpg", topic: "Western Wear"),
+  TopDeal(id: 5, name: "Casual Denim Shirt", image: "assets/images/topdeals/product5.jpg", topic: "Casual Wear"),
+  TopDeal(id: 6, name: "Chic Summer Dress", image: "assets/images/topdeals/product6.jpg", topic: "Party Wear"),
 ];
 
-// Flash sale list with objects
+// Flash sale list
 final List<FlashSale> flashSales = [
-  FlashSale(
-    id: 1,
-    name: "Elegant Rose Gold Dress",
-      image: "assets/images/flashsale/product1.jpg",
-    discount: 9,
-  ),
-  FlashSale(
-    id: 2,
-    name: "Chic Summer Dress",
-    image: "assets/images/flashsale/product2.jpg",
-    discount: 7,
-  ),
-  FlashSale(
-    id: 3,
-    name: "Floral Maxi Dress",
-    image: "assets/images/flashsale/product3.jpg",
-    discount: 5,
-  ),
-  FlashSale(
-    id: 4,
-    name: "Quilted Bomber Jacket",
-    image: "assets/images/flashsale/product4.jpg",
-    discount: 6,
-  ),
-  FlashSale(
-    id: 5,
-    name: "Quilted Bomber Jacket",
-    image: "assets/images/flashsale/product5.jpg",
-    discount: 5,
-  ),
-  FlashSale(
-    id: 6,
-    name: "Quilted Bomber Jacket",
-    image: "assets/images/flashsale/product6.jpg",
-    discount: 4,
-  ),
-
-
+  FlashSale(id: 1, name: "Elegant Rose Gold Dress", image: "assets/images/flashsale/product1.jpg", discount: 9),
+  FlashSale(id: 2, name: "Chic Summer Dress", image: "assets/images/flashsale/product2.jpg", discount: 7),
+  FlashSale(id: 3, name: "Floral Maxi Dress", image: "assets/images/flashsale/product3.jpg", discount: 5),
+  FlashSale(id: 4, name: "Quilted Bomber Jacket", image: "assets/images/flashsale/product4.jpg", discount: 6),
+  FlashSale(id: 5, name: "Quilted Bomber Jacket", image: "assets/images/flashsale/product5.jpg", discount: 5),
+  FlashSale(id: 6, name: "Quilted Bomber Jacket", image: "assets/images/flashsale/product6.jpg", discount: 4),
 ];
 
 // Banner images list
