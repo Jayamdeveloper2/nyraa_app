@@ -40,6 +40,7 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Stack(
+            clipBehavior: Clip.none,
             children: [
               SvgPicture.asset(
                 'assets/icons/shopping_cart.svg',
@@ -49,26 +50,28 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
               if (cartProvider.items.isNotEmpty)
                 Positioned(
-                  right: -2,
-                  top: -2,
+                  right: -8,
+                  top: -8,
                   child: Container(
-                    padding: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: Colors.red,
-                      borderRadius: BorderRadius.circular(10),
+                      shape: BoxShape.circle,
                     ),
                     constraints: const BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
+                      minWidth: 18,
+                      minHeight: 18,
                     ),
-                    child: Text(
-                      '${cartProvider.items.length}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                    child: Center(
+                      child: Text(
+                        '${cartProvider.items.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -78,6 +81,7 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Stack(
+            clipBehavior: Clip.none,
             children: [
               SvgPicture.asset(
                 'assets/icons/favourites.svg',
@@ -87,26 +91,28 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
               if (favoritesProvider.items.isNotEmpty)
                 Positioned(
-                  right: -2,
-                  top: -2,
+                  right: -8,
+                  top: -8,
                   child: Container(
-                    padding: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: Colors.red,
-                      borderRadius: BorderRadius.circular(10),
+                      shape: BoxShape.circle,
                     ),
                     constraints: const BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
+                      minWidth: 18,
+                      minHeight: 18,
                     ),
-                    child: Text(
-                      '${favoritesProvider.items.length}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                    child: Center(
+                      child: Text(
+                        '${favoritesProvider.items.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
