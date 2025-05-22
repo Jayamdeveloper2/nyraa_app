@@ -5,6 +5,7 @@ import 'pages/cart_page.dart';
 import 'pages/checkout_page.dart';
 import 'pages/favorites_page.dart';
 import 'pages/home_page.dart';
+import 'pages/auth/login_page.dart';
 import 'pages/order_confirmation_page.dart';
 import 'pages/orders_page.dart';
 import 'pages/product_details_page.dart';
@@ -12,6 +13,7 @@ import 'pages/profile_page.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/order_provider.dart';
+import 'splashscreens/splash_screen.dart';
 import 'widgets/custom_bottom_navbar.dart';
 
 void main() {
@@ -36,8 +38,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: Colors.grey[50],
         ),
-        initialRoute: '/',
+        initialRoute: '/splash',
         routes: {
+          '/splash': (context) => const SplashScreen(),
+          '/login': (context) => const LoginPage(),
           '/': (context) => const MainApp(),
           '/checkout': (context) => const CheckoutPage(),
           '/order-confirmation': (context) {

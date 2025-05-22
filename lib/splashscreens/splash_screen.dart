@@ -1,5 +1,6 @@
+// lib/splash_screen.dart
 import 'package:flutter/material.dart';
-import '../pages/home_page.dart';
+import '../pages/auth/login_page.dart';
 import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
@@ -14,10 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
+      Navigator.pushReplacementNamed(context, '/login');
     });
   }
 
