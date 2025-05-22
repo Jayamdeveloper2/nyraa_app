@@ -1,9 +1,9 @@
 // lib/pages/favorites_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/favorites_provider.dart';
-import '../providers/cart_provider.dart';
-import '../buttons/buttons.dart'; // Import the buttons file
+import '../../providers/favorites_provider.dart';
+import '../../providers/cart_provider.dart';
+import '../../buttons/buttons.dart'; // Import the buttons file
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});

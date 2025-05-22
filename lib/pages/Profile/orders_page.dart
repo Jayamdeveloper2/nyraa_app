@@ -1,9 +1,9 @@
 // lib/pages/orders_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../data/products_data.dart';
-import '../main.dart'; // Import for MainApp.navigatorKey
-import '../providers/order_provider.dart';
+import '../../data/products_data.dart';
+import '../../main.dart'; // Import for MainApp.navigatorKey
+import '../../providers/order_provider.dart';
 
 class Order {
   final String id;

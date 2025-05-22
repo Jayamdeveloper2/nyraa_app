@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/products_data.dart';
-import '../pages/orders_page.dart';
+import '../pages/Profile/orders_page.dart';
 import '../providers/cart_provider.dart';
 
 class SharedPrefsService {

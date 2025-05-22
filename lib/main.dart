@@ -1,15 +1,14 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'pages/cart_page.dart';
 import 'pages/checkout_page.dart';
-import 'pages/favorites_page.dart';
+import 'pages/Profile/favorites_page.dart';
 import 'pages/home_page.dart';
 import 'pages/auth/login_page.dart';
 import 'pages/order_confirmation_page.dart';
-import 'pages/orders_page.dart';
+import 'pages/Profile/orders_page.dart';
 import 'pages/product_details_page.dart';
-import 'pages/profile_page.dart';
+import 'pages/Profile/profile_page.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/order_provider.dart';
@@ -27,15 +26,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CartProvider()),
-        ChangeNotifierProvider(create: (context) => FavoritesProvider()),
+        ChangeNotifierProvider(create: (ctx) => CartProvider()),
+        ChangeNotifierProvider(create: (ctx) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => OrderProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'E-Commerce App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: const Color(0xFFBE6992),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFBE6992)),
+          useMaterial3: true,
           scaffoldBackgroundColor: Colors.grey[50],
         ),
         initialRoute: '/splash',
@@ -52,6 +53,9 @@ class MyApp extends StatelessWidget {
             final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
             return ProductDetailsPage(productId: args['productId']);
           },
+          '/cart': (ctx) => const CartPage(),
+          '/favorites': (ctx) => const FavoritesPage(),
+          '/home': (ctx) => const MainApp(),
         },
       ),
     );

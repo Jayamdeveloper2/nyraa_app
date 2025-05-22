@@ -1,6 +1,6 @@
 // lib/pages/profile_page.dart
 import 'package:flutter/material.dart';
-import '../main.dart'; // Import main.dart for MainApp.navigatorKey
+import '../../main.dart'; // Import main.dart for MainApp.navigatorKey
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

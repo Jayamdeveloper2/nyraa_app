@@ -284,7 +284,7 @@ final List<Product> allProducts = [
       "assets/images/productlist/product7.jpg",
       "assets/images/productlist/product8.jpg",
       "assets/images/productlist/product9.jpg",
-      "assets/images/productlist/product10jpg",
+      "assets/images/productlist/product10.jpg",
     ],
     name: "Leather Jacket",
     originalPrice: 200.0,

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/order_provider.dart';
-import 'orders_page.dart';
+import 'Profile/orders_page.dart';
 
 class OrderConfirmationPage extends StatelessWidget {
   final String orderId;

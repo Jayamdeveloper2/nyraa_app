@@ -1,7 +1,9 @@
 // lib/widgets/custom_bottom_navbar.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../providers/cart_provider.dart';
+import '../providers/favorites_provider.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -15,6 +17,9 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
+
     return BottomNavigationBar(
       selectedItemColor: const Color(0xFFBE6992),
       unselectedItemColor: Colors.grey,
@@ -34,20 +39,78 @@ class CustomBottomNavBar extends StatelessWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/shopping_cart.svg',
-            width: 24,
-            height: 24,
-            color: currentIndex == 1 ? const Color(0xFFBE6992) : Colors.grey,
+          icon: Stack(
+            children: [
+              SvgPicture.asset(
+                'assets/icons/shopping_cart.svg',
+                width: 24,
+                height: 24,
+                color: currentIndex == 1 ? const Color(0xFFBE6992) : Colors.grey,
+              ),
+              if (cartProvider.items.isNotEmpty)
+                Positioned(
+                  right: -2,
+                  top: -2,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '${cartProvider.items.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
           ),
           label: 'Cart',
         ),
         BottomNavigationBarItem(
-          icon: SvgPicture.asset(
-            'assets/icons/favourites.svg',
-            width: 24,
-            height: 24,
-            color: currentIndex == 2 ? const Color(0xFFBE6992) : Colors.grey,
+          icon: Stack(
+            children: [
+              SvgPicture.asset(
+                'assets/icons/favourites.svg',
+                width: 24,
+                height: 24,
+                color: currentIndex == 2 ? const Color(0xFFBE6992) : Colors.grey,
+              ),
+              if (favoritesProvider.items.isNotEmpty)
+                Positioned(
+                  right: -2,
+                  top: -2,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '${favoritesProvider.items.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
           ),
           label: 'Favourites',
         ),
