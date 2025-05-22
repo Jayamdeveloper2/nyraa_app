@@ -19,13 +19,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int _currentImageIndex = 0;
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
+  String _selectedColor = '';
+  String _selectedSize = '';
 
   @override
   void initState() {
     super.initState();
-    // Scroll to top when page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.jumpTo(0);
+      final product = allProducts.firstWhere((p) => p.id.toString() == widget.productId);
+      setState(() {
+        _selectedColor = product.color.split(', ').first;
+        _selectedSize = product.size.split(', ').first;
+      });
     });
   }
 
@@ -36,7 +42,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     super.dispose();
   }
 
-  void _showAddToCartBottomSheet(BuildContext context, dynamic product) {
+  void _showAddToCartBottomSheet(BuildContext context, Product product) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -86,6 +92,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
+                          'Color: $_selectedColor',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        Text(
+                          'Size: $_selectedSize',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
                           '₹${product.price.toStringAsFixed(0)}',
                           style: const TextStyle(
                             fontSize: 14,
@@ -103,7 +124,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context); // Close bottom sheet
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, '/cart');
                   },
                   style: ElevatedButton.styleFrom(
@@ -195,21 +216,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 ),
             ],
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.share,
-              color: Colors.white,
-              size: 28,
-            ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Sharing product...'),
-                  backgroundColor: Color(0xFFBE6992),
-                ),
-              );
-            },
-          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -236,7 +242,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         product.images[index],
                         width: double.infinity,
                         height: double.infinity,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.cover, // Changed to cover to fill the area
+                        alignment: Alignment.center,
                       );
                     },
                   ),
@@ -265,7 +272,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 ],
               ),
             ),
-            // Small Images Section (Below Main Image)
+            // Small Images Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: SingleChildScrollView(
@@ -395,6 +402,108 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
+                  // Color Selection
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Color',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: product.color.split(', ').map((color) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedColor = color;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: _selectedColor == color
+                                    ? const Color(0xFFBE6992).withOpacity(0.2)
+                                    : Colors.grey.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: _selectedColor == color
+                                      ? const Color(0xFFBE6992)
+                                      : Colors.transparent,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Text(
+                                color,
+                                style: TextStyle(
+                                  color: _selectedColor == color
+                                      ? const Color(0xFFBE6992)
+                                      : Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // Size Selection
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Size',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: product.size.split(', ').map((size) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedSize = size;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: _selectedSize == size
+                                    ? const Color(0xFFBE6992).withOpacity(0.2)
+                                    : Colors.grey.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: _selectedSize == size
+                                      ? const Color(0xFFBE6992)
+                                      : Colors.transparent,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Text(
+                                size,
+                                style: TextStyle(
+                                  color: _selectedSize == size
+                                      ? const Color(0xFFBE6992)
+                                      : Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   // Delivery Information
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -469,27 +578,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 200,
+                          height: MediaQuery.of(context).size.height * 0.3,
                           child: TabBarView(
+                            physics: const NeverScrollableScrollPhysics(),
                             children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: product.specifications.entries.map((entry) {
-                                      return _buildSpecRow(entry.key, entry.value);
-                                    }).toList(),
-                                  ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: product.specifications.entries.map((entry) {
+                                    return _buildSpecRow(entry.key, entry.value);
+                                  }).toList(),
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    product.about,
-                                    style: const TextStyle(fontSize: 14, height: 1.5),
-                                  ),
+                                child: Text(
+                                  product.about,
+                                  style: const TextStyle(fontSize: 14, height: 1.5),
                                 ),
                               ),
                             ],
@@ -506,19 +612,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
-                    height: 180,
+                    height: 200, // Increased height to accommodate full image
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
                         final relatedProducts = allProducts
-                            .where((p) => p.id != product.id && p.category == product.category)
+                            .where((p) => p.id != product.id && p.brand == product.brand) // Prioritize same brand
                             .toList()
-                          ..sort((a, b) {
-                            if (a.brand == product.brand && b.brand != product.brand) return -1;
-                            if (b.brand == product.brand && a.brand != product.brand) return 1;
-                            return (a.price - product.price).abs().compareTo((b.price - product.price).abs());
-                          });
+                          ..sort((a, b) => (a.price - product.price).abs().compareTo((b.price - product.price).abs()));
                         if (index >= relatedProducts.length) return const SizedBox.shrink();
                         final recommendedProduct = relatedProducts[index];
                         return GestureDetector(
@@ -533,8 +635,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             );
                           },
                           child: Container(
-                            width: 120,
-                            height: 180,
+                            width: 140, // Increased width for better image display
+                            height: 200,
                             margin: const EdgeInsets.only(right: 12.0),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey.withOpacity(0.2)),
@@ -550,9 +652,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   ),
                                   child: Image.asset(
                                     recommendedProduct.image,
-                                    fit: BoxFit.cover,
-                                    width: 120,
-                                    height: 100,
+                                    fit: BoxFit.cover, // Use cover to fill the image area
+                                    width: 140,
+                                    height: 120, // Increased height for better image visibility
+                                    alignment: Alignment.center,
                                   ),
                                 ),
                                 Padding(
@@ -569,6 +672,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                         recommendedProduct.name,
                                         style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                                         overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
                                       ),
                                       if (recommendedProduct.discount > 0)
                                         Container(
@@ -631,8 +735,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             Expanded(
               child: AddToCartButton(
                 onPressed: () {
-                  cartProvider.addItem(product);
-                  _showAddToCartBottomSheet(context, product);
+                  if (_selectedColor.isEmpty || _selectedSize.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please select color and size'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    return;
+                  }
+                  final productWithVariant = product.copyWith(
+                    color: _selectedColor,
+                    size: _selectedSize,
+                  );
+                  cartProvider.addItem(productWithVariant);
+                  _showAddToCartBottomSheet(context, productWithVariant);
                 },
               ),
             ),
@@ -640,7 +757,20 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             Expanded(
               child: BuyNowButton(
                 onPressed: () {
-                  cartProvider.addItem(product);
+                  if (_selectedColor.isEmpty || _selectedSize.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please select color and size'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    return;
+                  }
+                  final productWithVariant = product.copyWith(
+                    color: _selectedColor,
+                    size: _selectedSize,
+                  );
+                  cartProvider.addItem(productWithVariant);
                   Navigator.pushNamed(context, '/checkout');
                 },
               ),
