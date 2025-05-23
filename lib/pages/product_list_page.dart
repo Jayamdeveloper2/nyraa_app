@@ -505,7 +505,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   sliver: SliverGrid(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.65,  // Changed from 0.7 to 0.65 to make cards taller
+                      childAspectRatio: 0.50,  // Changed from 0.7 to 0.65 to make cards taller
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
                     ),
