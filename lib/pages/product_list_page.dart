@@ -151,72 +151,82 @@ class _ProductListScreenState extends State<ProductListScreen> {
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
             const Text(
               'Sort By',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 16),
-            ListTile(
-              title: const Text(
-                'Sort by Popularity',
-                style: TextStyle(fontSize: 16),
+            const SizedBox(height: 20),
+            _buildSortOption('Sort by Popularity', 'bestSelling'),
+            _buildSortOption('Price: Low to High', 'priceLowToHigh'),
+            _buildSortOption('Price: High to Low', 'priceHighToLow'),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSortOption(String title, String value) {
+    final isSelected = sortOption == value;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          sortOption = value;
+          applyFilters();
+        });
+        Navigator.pop(context);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        margin: const EdgeInsets.only(bottom: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFBE6992).withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? const Color(0xFFBE6992) : Colors.transparent,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  color: isSelected ? const Color(0xFFBE6992) : Colors.black87,
+                ),
               ),
-              onTap: () {
-                setState(() {
-                  sortOption = 'bestSelling';
-                  applyFilters();
-                });
-                Navigator.pop(context);
-              },
-              trailing: sortOption == 'bestSelling'
-                  ? const Icon(Icons.check, color: Color(0xFFBE6992))
-                  : null,
             ),
-            ListTile(
-              title: const Text(
-                'Price: Low to High',
-                style: TextStyle(fontSize: 16),
+            if (isSelected)
+              const Icon(
+                Icons.check_circle,
+                color: Color(0xFFBE6992),
+                size: 20,
               ),
-              onTap: () {
-                setState(() {
-                  sortOption = 'priceLowToHigh';
-                  applyFilters();
-                });
-                Navigator.pop(context);
-              },
-              trailing: sortOption == 'priceLowToHigh'
-                  ? const Icon(Icons.check, color: Color(0xFFBE6992))
-                  : null,
-            ),
-            ListTile(
-              title: const Text(
-                'Price: High to Low',
-                style: TextStyle(fontSize: 16),
-              ),
-              onTap: () {
-                setState(() {
-                  sortOption = 'priceHighToLow';
-                  applyFilters();
-                });
-                Navigator.pop(context);
-              },
-              trailing: sortOption == 'priceHighToLow'
-                  ? const Icon(Icons.check, color: Color(0xFFBE6992))
-                  : null,
-            ),
           ],
         ),
       ),
@@ -229,28 +239,37 @@ class _ProductListScreenState extends State<ProductListScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
               const Text(
                 'Added to Cart',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
                       product.image,
                       width: 80,
@@ -285,7 +304,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -296,10 +315,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFBE6992),
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    elevation: 0,
                   ),
                   child: const Text(
                     'Go to Cart',
@@ -310,7 +330,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
             ],
           ),
         );
@@ -719,86 +739,92 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 60)),
+                const SliverToBoxAdapter(child: SizedBox(height: 80)),
               ],
             ),
+            // Replace the existing AnimatedPositioned widget in the first file with this:
+
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              bottom: _isSortFilterVisible ? 0 : -60,
+              bottom: _isSortFilterVisible ? 0 : -80,
               left: 0,
               right: 0,
               child: Container(
-                color: Colors.grey[50],
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                margin: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: showSortBottomSheet,
-                      child: Container(
-                        width: (screenWidth - 24) / 2,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.grey[300]!, width: 1),
-                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(8)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[200]!,
-                              blurRadius: 3,
-                              offset: const Offset(0, 1),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: showSortBottomSheet,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              bottomLeft: Radius.circular(16),
                             ),
-                          ],
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.sort, color: Color(0xFFBE6992), size: 18),
-                            SizedBox(width: 6),
-                            Text(
-                              'Sort',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.sort, color: Color(0xFFBE6992), size: 20),
+                              SizedBox(width: 8),
+                              Text(
+                                'Sort',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: showFilterBottomSheet,
-                      child: Container(
-                        width: (screenWidth - 24) / 2,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.grey[300]!, width: 1),
-                          borderRadius: const BorderRadius.horizontal(right: Radius.circular(8)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[200]!,
-                              blurRadius: 3,
-                              offset: const Offset(0, 1),
+                    Container(
+                      width: 1,
+                      height: 24,
+                      color: Colors.grey[300],
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: showFilterBottomSheet,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(16),
+                              bottomRight: Radius.circular(16),
                             ),
-                          ],
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.filter_list, color: Color(0xFFBE6992), size: 18),
-                            SizedBox(width: 6),
-                            Text(
-                              'Filters',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.tune, color: Color(0xFFBE6992), size: 20),
+                              SizedBox(width: 8),
+                              Text(
+                                'Filter',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
