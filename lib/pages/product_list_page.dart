@@ -29,7 +29,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   };
   List<String> appliedFilters = [];
 
-  // Scroll controller for detecting scroll direction
   final ScrollController _scrollController = ScrollController();
   bool _isSortFilterVisible = true;
   double _lastOffset = 0;
@@ -39,18 +38,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
     super.initState();
     applyFilters();
 
-    // Add listener to detect scroll direction
     _scrollController.addListener(() {
-      double currentOffset = _scrollController.offset;
+      final double currentOffset = _scrollController.offset;
       if (currentOffset > _lastOffset && currentOffset > 0) {
-        // Scrolling down
         if (_isSortFilterVisible) {
           setState(() {
             _isSortFilterVisible = false;
           });
         }
       } else if (currentOffset < _lastOffset) {
-        // Scrolling up
         if (!_isSortFilterVisible) {
           setState(() {
             _isSortFilterVisible = true;
@@ -78,7 +74,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     }
     result = result.where((p) => p.price >= filters['priceRange']['min'] && p.price <= filters['priceRange']['max']).toList();
     if (filters['size'].isNotEmpty) {
-      result = result.where((p) => filters['size'].contains(p.size)).toList();
+      result = result.where((p) => filters['size'].any((size) => p.size.split(', ').contains(size))).toList();
     }
     if (filters['style'].isNotEmpty) {
       result = result.where((p) => filters['style'].contains(p.style)).toList();
@@ -103,7 +99,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         break;
     }
 
-    List<String> tempFilters = [];
+    final List<String> tempFilters = [];
     if (filters['availability'].isNotEmpty) {
       tempFilters.add('Availability: ${filters['availability'].join(", ")}');
     }
@@ -152,9 +148,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
           ),
@@ -294,7 +290,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context); // Close bottom sheet
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, '/cart');
                   },
                   style: ElevatedButton.styleFrom(
@@ -349,13 +345,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
           child: TextField(
             decoration: InputDecoration(
-              hintText: "Search Products",
+              hintText: 'Search Products',
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+              suffixIcon: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
                 child: Icon(
                   Icons.search,
-                  color: const Color(0xFFBE6992),
+                  color: Color(0xFFBE6992),
                   size: 18,
                 ),
               ),
@@ -509,7 +505,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   sliver: SliverGrid(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.60,
+                      childAspectRatio: 0.7,  // Adjusted to fit content tightly
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
                     ),
@@ -529,217 +525,175 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           child: Container(
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              border: Border.all(color: Colors.grey[200]!),
                               borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey[300]!,
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,  // Takes only the space needed
                               children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(12),
-                                    topRight: Radius.circular(12),
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      AspectRatio(
-                                        aspectRatio: 1,
-                                        child: Image.asset(
-                                          product.image,
-                                          fit: BoxFit.cover,
-                                          alignment: Alignment.center,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 8,
-                                        left: 8,
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey[300]!,
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '${product.rating}',
-                                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                                              ),
-                                              const SizedBox(width: 2),
-                                              const Icon(Icons.star, size: 14, color: Colors.amber),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 8,
-                                        right: 8,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            if (isFavorite) {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => AlertDialog(
-                                                  title: const Text('Remove from Favorites'),
-                                                  content: Text('Are you sure you want to remove ${product.name} from your favorites?'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () => Navigator.pop(context),
-                                                      child: const Text('Cancel'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        favoritesProvider.removeFromFavorites(product.id);
-                                                        Navigator.pop(context);
-                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                          const SnackBar(
-                                                            content: Text('Removed from favorites'),
-                                                            backgroundColor: Color(0xFFBE6992),
-                                                            duration: Duration(seconds: 1),
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: const Text('Remove', style: TextStyle(color: Colors.red)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            } else {
-                                              favoritesProvider.toggleFavorite(product);
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text('Added to favorites'),
-                                                  backgroundColor: Color(0xFFBE6992),
-                                                  duration: Duration(seconds: 1),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              shape: BoxShape.circle,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey[300]!,
-                                                  blurRadius: 4,
-                                                  offset: const Offset(0, 2),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Icon(
-                                              isFavorite ? Icons.favorite : Icons.favorite_border,
-                                              color: isFavorite ? const Color(0xFFBE6992) : Colors.grey,
-                                              size: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                Flexible(  // Prevents overflow by adapting to available space
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                    ),
+                                    child: Stack(
                                       children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                                              child: Text(
-                                                product.brand,
-                                                style: const TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.grey,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
-                                              product.name,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black87,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ],
+                                        AspectRatio(
+                                          aspectRatio: 0.9,
+                                          child: Image.asset(
+                                            product.image,
+                                            fit: BoxFit.cover,
+                                            alignment: Alignment.center,
+                                          ),
                                         ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  '₹${product.price.toStringAsFixed(0)}',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black87,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 8),
-                                                if (product.discount > 0)
-                                                  Text(
-                                                    '₹${product.originalPrice.toStringAsFixed(0)}',
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.grey,
-                                                      decoration: TextDecoration.lineThrough,
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                            if (product.discount > 0)
-                                              Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                                                child: Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.arrow_upward,
-                                                      color: Colors.green,
-                                                      size: 14,
-                                                    ),
-                                                    const SizedBox(width: 2),
-                                                    Text(
-                                                      '${product.discount}%',
-                                                      style: const TextStyle(
-                                                        color: Colors.green,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.bold,
+                                        Positioned(
+                                          top: 8,
+                                          right: 8,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              if (isFavorite) {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    title: const Text('Remove from Favorites'),
+                                                    content: Text('Are you sure you want to remove ${product.name} from your favorites?'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () => Navigator.pop(context),
+                                                        child: const Text('Cancel'),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          favoritesProvider.removeFromFavorites(product.id);
+                                                          Navigator.pop(context);
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            const SnackBar(
+                                                              content: Text('Removed from favorites'),
+                                                              backgroundColor: Color(0xFFBE6992),
+                                                              duration: Duration(seconds: 1),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: const Text(
+                                                          'Remove',
+                                                          style: TextStyle(color: Colors.red),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              } else {
+                                                favoritesProvider.toggleFavorite(product);
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text('Added to favorites'),
+                                                    backgroundColor: Color(0xFFBE6992),
+                                                    duration: Duration(seconds: 1),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey[300]!,
+                                                    blurRadius: 4,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
                                               ),
-                                          ],
+                                              child: Icon(
+                                                isFavorite ? Icons.favorite : Icons.favorite_border,
+                                                color: isFavorite ? const Color(0xFFBE6992) : Colors.grey,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                  child: Text(
+                                    product.brand,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Text(
+                                  product.name,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '₹${product.price.toStringAsFixed(0)}',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          if (product.discount > 0) ...[
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              '₹${product.originalPrice.toStringAsFixed(0)}',
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                                decoration: TextDecoration.lineThrough,
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                      if (product.discount > 0) ...[
+                                        const SizedBox(width: 4),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.arrow_upward,
+                                              color: Colors.green,
+                                              size: 14,
+                                            ),
+                                            const SizedBox(width: 2),
+                                            Text(
+                                              '${product.discount}%',
+                                              style: const TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
                                 AddToCartButton(
@@ -757,12 +711,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 60), // Adjust based on the height of the sort/filter bar
-                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 60)),
               ],
             ),
-            // Sort and Filter section at the bottom
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
@@ -775,7 +726,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Sort Button
                     GestureDetector(
                       onTap: showSortBottomSheet,
                       child: Container(
@@ -784,9 +734,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Colors.grey[300]!, width: 1),
-                          borderRadius: const BorderRadius.horizontal(
-                            left: Radius.circular(8),
-                          ),
+                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(8)),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey[200]!,
@@ -795,16 +743,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ),
                           ],
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.sort,
-                              color: const Color(0xFFBE6992),
-                              size: 18,
-                            ),
-                            const SizedBox(width: 6),
-                            const Text(
+                            Icon(Icons.sort, color: Color(0xFFBE6992), size: 18),
+                            SizedBox(width: 6),
+                            Text(
                               'Sort',
                               style: TextStyle(
                                 fontSize: 12,
@@ -816,7 +760,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         ),
                       ),
                     ),
-                    // Filter Button
                     GestureDetector(
                       onTap: showFilterBottomSheet,
                       child: Container(
@@ -825,9 +768,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Colors.grey[300]!, width: 1),
-                          borderRadius: const BorderRadius.horizontal(
-                            right: Radius.circular(8),
-                          ),
+                          borderRadius: const BorderRadius.horizontal(right: Radius.circular(8)),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey[200]!,
@@ -836,16 +777,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ),
                           ],
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.filter_list,
-                              color: const Color(0xFFBE6992),
-                              size: 18,
-                            ),
-                            const SizedBox(width: 6),
-                            const Text(
+                            Icon(Icons.filter_list, color: Color(0xFFBE6992), size: 18),
+                            SizedBox(width: 6),
+                            Text(
                               'Filters',
                               style: TextStyle(
                                 fontSize: 12,

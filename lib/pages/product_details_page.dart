@@ -152,6 +152,76 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
+  void _showFullScreenImageViewer(BuildContext context, List<String> images, int initialIndex) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.black,
+          insetPadding: EdgeInsets.zero,
+          child: Stack(
+            children: [
+              PageView.builder(
+                controller: PageController(initialPage: initialIndex),
+                itemCount: images.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentImageIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return InteractiveViewer(
+                    panEnabled: true,
+                    minScale: 1.0,
+                    maxScale: 4.0,
+                    child: Image.asset(
+                      images[index],
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                  );
+                },
+              ),
+              Positioned(
+                top: 40,
+                right: 16,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    images.length,
+                        (i) => Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: i == _currentImageIndex
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.5),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final product = allProducts.firstWhere((p) => p.id.toString() == widget.productId);
@@ -229,23 +299,28 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               width: double.infinity,
               child: Stack(
                 children: [
-                  PageView.builder(
-                    controller: _pageController,
-                    itemCount: product.images.length,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentImageIndex = index;
-                      });
+                  GestureDetector(
+                    onTap: () {
+                      _showFullScreenImageViewer(context, product.images, _currentImageIndex);
                     },
-                    itemBuilder: (context, index) {
-                      return Image.asset(
-                        product.images[index],
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover, // Changed to cover to fill the area
-                        alignment: Alignment.center,
-                      );
-                    },
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: product.images.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        return Image.asset(
+                          product.images[index],
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                        );
+                      },
+                    ),
                   ),
                   Positioned(
                     bottom: 10,
@@ -609,16 +684,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   const Text(
                     'Related Products',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
-                    height: 200, // Increased height to accommodate full image
+                    height: 220,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
                         final relatedProducts = allProducts
-                            .where((p) => p.id != product.id && p.brand == product.brand) // Prioritize same brand
+                            .where((p) => p.id != product.id && p.brand == product.brand)
                             .toList()
                           ..sort((a, b) => (a.price - product.price).abs().compareTo((b.price - product.price).abs()));
                         if (index >= relatedProducts.length) return const SizedBox.shrink();
@@ -635,15 +711,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             );
                           },
                           child: Container(
-                            width: 140, // Increased width for better image display
-                            height: 200,
+                            width: 140,
                             margin: const EdgeInsets.only(right: 12.0),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.withOpacity(0.2)),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 ClipRRect(
                                   borderRadius: const BorderRadius.only(
@@ -652,54 +726,65 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   ),
                                   child: Image.asset(
                                     recommendedProduct.image,
-                                    fit: BoxFit.cover, // Use cover to fill the image area
+                                    fit: BoxFit.contain,
                                     width: 140,
-                                    height: 120, // Increased height for better image visibility
-                                    alignment: Alignment.center,
+                                    height: 120,
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         recommendedProduct.brand,
                                         style: const TextStyle(fontSize: 12, color: Colors.grey),
                                         overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
                                       ),
+                                      const SizedBox(height: 4),
                                       Text(
                                         recommendedProduct.name,
-                                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
+                                        textAlign: TextAlign.center,
                                       ),
                                       if (recommendedProduct.discount > 0)
-                                        Container(
-                                          margin: const EdgeInsets.only(top: 4),
-                                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(4),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                Icons.arrow_upward,
-                                                color: Colors.green,
-                                                size: 12,
-                                              ),
-                                              const SizedBox(width: 2),
-                                              Text(
-                                                '${recommendedProduct.discount}%',
-                                                style: const TextStyle(
+                                        Center(
+                                          child: Container(
+                                            margin: const EdgeInsets.only(top: 4),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 4,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green.withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(
+                                                  Icons.arrow_upward,
                                                   color: Colors.green,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.bold,
+                                                  size: 12,
                                                 ),
-                                              ),
-                                            ],
+                                                const SizedBox(width: 2),
+                                                Text(
+                                                  '${recommendedProduct.discount}%',
+                                                  style: const TextStyle(
+                                                    color: Colors.green,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                     ],
