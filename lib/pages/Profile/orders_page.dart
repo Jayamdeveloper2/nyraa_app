@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/products_data.dart';
-import '../../main.dart'; // Import for MainApp.navigatorKey
 import '../../providers/order_provider.dart';
 
 class Order {
@@ -48,15 +47,20 @@ class OrdersPage extends StatelessWidget {
         backgroundColor: const Color(0xFFBE6992),
         title: const Text(
           'My Orders',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Switch to Home tab (index 0)
-            MainApp.navigatorKey.currentState?.setCurrentIndex(0);
+            // Fix: Use Navigator.pop instead of setting tab index
+            Navigator.pop(context);
           },
         ),
+        elevation: 0, // Remove shadow for modern look
       ),
       body: orderProvider.isLoading
           ? const Center(
@@ -100,8 +104,7 @@ class OrdersPage extends StatelessWidget {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              // Switch to Home tab (index 0)
-              MainApp.navigatorKey.currentState?.setCurrentIndex(0);
+              Navigator.pushReplacementNamed(context, '/home');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFBE6992),
@@ -140,17 +143,18 @@ class OrdersPage extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16), // Increased radius
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.grey.withOpacity(0.08),
+            blurRadius: 15,
+            spreadRadius: 1,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20), // Increased padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -160,68 +164,109 @@ class OrdersPage extends StatelessWidget {
                 Text(
                   'Order #${order.id}',
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18, // Increased font size
                     fontWeight: FontWeight.bold,
+                    letterSpacing: 0.3, // Added letter spacing
                   ),
                 ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: order.status == 'Processing'
+                        ? Colors.orange.withOpacity(0.1)
+                        : order.status == 'Delivered'
+                        ? Colors.green.withOpacity(0.1)
+                        : Colors.red.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    order.status,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: order.status == 'Processing'
+                          ? Colors.orange
+                          : order.status == 'Delivered'
+                          ? Colors.green
+                          : Colors.red,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16), // Increased spacing
+            Row(
+              children: [
+                Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey[600]),
+                const SizedBox(width: 8),
                 Text(
-                  order.status,
+                  'Placed on: ${_formatDate(order.date)}',
                   style: TextStyle(
                     fontSize: 14,
-                    color: order.status == 'Processing'
-                        ? Colors.orange
-                        : order.status == 'Delivered'
-                        ? Colors.green
-                        : Colors.red,
-                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              'Placed on: ${_formatDate(order.date)}',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+            Row(
+              children: [
+                Icon(Icons.payments_outlined, size: 16, color: Colors.grey[600]),
+                const SizedBox(width: 8),
+                Text(
+                  'Total: ₹${order.total.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFBE6992),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Total: ₹${order.total.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFFBE6992),
-              ),
-            ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
             const Divider(height: 1, color: Colors.grey),
-            const SizedBox(height: 12),
-            Text(
-              'Items (${order.items.length})',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFBE6992).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.shopping_bag_outlined,
+                    color: Color(0xFFBE6992),
+                    size: 18,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'Items (${order.items.length})',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             Column(
               children: order.items.take(2).map((item) {
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
                         child: Image.asset(
                           item.product.image,
-                          width: 50,
-                          height: 50,
+                          width: 60, // Increased size
+                          height: 60, // Increased size
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,17 +274,19 @@ class OrdersPage extends StatelessWidget {
                             Text(
                               item.product.name,
                               style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
+                            const SizedBox(height: 4),
                             Text(
-                              '₹${item.price.toStringAsFixed(2)} x ${item.quantity}',
+                              '₹${item.price.toStringAsFixed(2)} × ${item.quantity}',
                               style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
+                                fontSize: 14,
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -252,19 +299,20 @@ class OrdersPage extends StatelessWidget {
             ),
             if (order.items.length > 2)
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   '+${order.items.length - 2} more items',
                   style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
+                    fontSize: 14,
+                    color: const Color(0xFFBE6992),
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   // Navigate to order confirmation page
                   Navigator.pushNamed(
@@ -273,19 +321,20 @@ class OrdersPage extends StatelessWidget {
                     arguments: {'orderId': order.id},
                   );
                 },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFFBE6992),
-                  side: const BorderSide(color: Color(0xFFBE6992)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFBE6992),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 child: const Text(
                   'View Order Details',
                   style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

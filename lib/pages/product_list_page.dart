@@ -505,7 +505,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   sliver: SliverGrid(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.7,  // Adjusted to fit content tightly
+                      childAspectRatio: 0.65,  // Changed from 0.7 to 0.65 to make cards taller
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
                     ),
@@ -526,12 +526,20 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
+                              boxShadow: [  // Added shadow for premium look
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,  // Takes only the space needed
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Flexible(  // Prevents overflow by adapting to available space
+                                Flexible(
                                   child: ClipRRect(
                                     borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(12),
@@ -540,7 +548,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                     child: Stack(
                                       children: [
                                         AspectRatio(
-                                          aspectRatio: 0.9,
+                                          aspectRatio: 0.8,  // Changed from 0.9 to 0.8 to make images taller
                                           child: Image.asset(
                                             product.image,
                                             fit: BoxFit.cover,

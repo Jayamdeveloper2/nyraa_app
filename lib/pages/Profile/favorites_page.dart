@@ -104,7 +104,7 @@ class FavoritesPage extends StatelessWidget {
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.7, // Adjusted to match product list
+            childAspectRatio: 0.65, // Changed from 0.7 to 0.65 to match product list
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
           ),
@@ -125,6 +125,14 @@ class FavoritesPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
+                  boxShadow: [  // Added shadow for premium look
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +147,7 @@ class FavoritesPage extends StatelessWidget {
                         child: Stack(
                           children: [
                             AspectRatio(
-                              aspectRatio: 0.9, // Match product list aspect ratio
+                              aspectRatio: 0.8, // Changed from 0.9 to 0.8 to make images taller
                               child: Image.asset(
                                 product.image,
                                 fit: BoxFit.cover,
