@@ -93,7 +93,6 @@ class _MainAppState extends State<MainApp> {
   ];
 
   void _onNavTap(int index) {
-    print('MainApp: BottomNav tapped, index = $index'); // Debug
     setState(() {
       _currentIndex = index;
     });
@@ -113,9 +112,7 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('MainApp: Building with currentIndex = $_currentIndex'); // Debug
     return Scaffold(
-      key: MainApp.navigatorKey,
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,

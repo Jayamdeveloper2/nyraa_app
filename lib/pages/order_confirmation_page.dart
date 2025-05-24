@@ -19,6 +19,7 @@ class OrderConfirmationPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
+      // In the AppBar of order_confirmation_page.dart
       appBar: AppBar(
         backgroundColor: const Color(0xFFBE6992),
         title: const Text(
@@ -29,12 +30,18 @@ class OrderConfirmationPage extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        elevation: 0, // Remove shadow for modern look
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Navigate back to the root to ensure MainApp handles navigation
-            Navigator.popUntil(context, ModalRoute.withName('/'));
+            // Navigate back to home with bottom nav on home tab
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainApp(initialIndex: 0),
+              ),
+                  (Route<dynamic> route) => false,
+            );
           },
         ),
       ),
@@ -107,7 +114,6 @@ class OrderConfirmationPage extends StatelessWidget {
                 height: 54,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to root and set orders tab (index 3) as active
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -141,10 +147,11 @@ class OrderConfirmationPage extends StatelessWidget {
                 height: 54,
                 child: OutlinedButton(
                   onPressed: () {
-                    // This will properly reset the navigation stack and show home page
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const MainApp(initialIndex: 0)),
+                      MaterialPageRoute(
+                        builder: (context) => const MainApp(initialIndex: 0),
+                      ),
                           (Route<dynamic> route) => false,
                     );
                   },
