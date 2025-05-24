@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/order_provider.dart';
 import 'Profile/orders_page.dart';
-
+import '../../main.dart';
 class OrderConfirmationPage extends StatelessWidget {
   final String orderId;
 
@@ -101,56 +101,66 @@ class OrderConfirmationPage extends StatelessWidget {
               const SizedBox(height: 32),
               _buildDeliveryTimeline(),
               const SizedBox(height: 32),
+              // In order_confirmation_page.dart
               SizedBox(
                 width: double.infinity,
-                height: 54, // Increased height
+                height: 54,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to the root; MainApp will switch to Orders page via bottom nav
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                    // Note: To switch to Orders tab, user can tap the Orders icon in the bottom nav
+                    // Navigate to root and set orders tab (index 3) as active
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainApp(initialIndex: 3),
+                      ),
+                          (Route<dynamic> route) => false,
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFBE6992),
                     foregroundColor: Colors.white,
-                    elevation: 0, // Removed shadow
+                    elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Increased radius
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text(
                     'View All Orders',
                     style: TextStyle(
-                      fontSize: 18, // Increased font size
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5, // Added letter spacing
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
+              // order_confirmation_page.dart
               SizedBox(
                 width: double.infinity,
-                height: 54, // Increased height
+                height: 54,
                 child: OutlinedButton(
                   onPressed: () {
-                    // Navigate to the root; MainApp will switch to Home page via bottom nav
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                    // Note: To switch to Home tab, user can tap the Home icon in the bottom nav
+                    // This will properly reset the navigation stack and show home page
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MainApp(initialIndex: 0)),
+                          (Route<dynamic> route) => false,
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFFBE6992),
                     side: const BorderSide(color: Color(0xFFBE6992), width: 1.5),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12), // Increased radius
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   child: const Text(
                     'Continue Shopping',
                     style: TextStyle(
-                      fontSize: 18, // Increased font size
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5, // Added letter spacing
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ),

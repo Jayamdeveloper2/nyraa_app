@@ -63,7 +63,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+  final int initialIndex;
+
+  const MainApp({super.key, this.initialIndex = 0});
 
   static final GlobalKey<_MainAppState> navigatorKey = GlobalKey<_MainAppState>();
 
@@ -72,7 +74,15 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
+
 
   final List<Widget> _pages = [
     const HomePage(),

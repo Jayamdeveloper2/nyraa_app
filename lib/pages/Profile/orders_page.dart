@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/products_data.dart';
 import '../../providers/order_provider.dart';
+import '../../main.dart';
 
 class Order {
   final String id;
@@ -53,14 +54,7 @@ class OrdersPage extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            // Fix: Use Navigator.pop instead of setting tab index
-            Navigator.pop(context);
-          },
-        ),
-        elevation: 0, // Remove shadow for modern look
+        elevation: 0,
       ),
       body: orderProvider.isLoading
           ? const Center(
@@ -104,7 +98,8 @@ class OrdersPage extends StatelessWidget {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/home');
+              // Navigate to home tab
+              MainApp.navigatorKey.currentState?.setCurrentIndex(0);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFBE6992),
@@ -143,7 +138,7 @@ class OrdersPage extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16), // Increased radius
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.08),
@@ -154,7 +149,7 @@ class OrdersPage extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20), // Increased padding
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -164,9 +159,9 @@ class OrdersPage extends StatelessWidget {
                 Text(
                   'Order #${order.id}',
                   style: const TextStyle(
-                    fontSize: 18, // Increased font size
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 0.3, // Added letter spacing
+                    letterSpacing: 0.3,
                   ),
                 ),
                 Container(
@@ -194,7 +189,7 @@ class OrdersPage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16), // Increased spacing
+            const SizedBox(height: 16),
             Row(
               children: [
                 Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey[600]),
@@ -261,8 +256,8 @@ class OrdersPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         child: Image.asset(
                           item.product.image,
-                          width: 60, // Increased size
-                          height: 60, // Increased size
+                          width: 60,
+                          height: 60,
                           fit: BoxFit.cover,
                         ),
                       ),
