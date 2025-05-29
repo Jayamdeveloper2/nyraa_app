@@ -1,6 +1,5 @@
 // lib/pages/profile_page.dart
 import 'package:flutter/material.dart';
-import '../../main.dart'; // Import main.dart for MainApp.navigatorKey
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -8,18 +7,33 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
         backgroundColor: const Color(0xFFBE6992),
+        elevation: 0,
         title: const Text(
           'My Profile',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
           onPressed: () {
-            // Switch to Home tab (index 0)
-            MainApp.navigatorKey.currentState?.setCurrentIndex(0);
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -27,9 +41,11 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           children: [
             _buildUserInfoSection(context),
-            _buildMenuSection(context),
-            _buildLogoutButton(context),
             const SizedBox(height: 16),
+            _buildMenuSection(context),
+            const SizedBox(height: 24),
+            _buildLogoutButton(context),
+            const SizedBox(height: 32),
           ],
         ),
       ),
@@ -38,92 +54,158 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildUserInfoSection(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundColor: const Color(0xFFBE6992).withOpacity(0.2),
-            child: const Icon(
-              Icons.person,
-              size: 40,
-              color: Color(0xFFBE6992),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Akansha Patel',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+          Stack(
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFFBE6992),
+                      const Color(0xFFBE6992).withOpacity(0.7),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFBE6992).withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.person,
+                  size: 50,
+                  color: Colors.white,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Edit profile feature coming soon!'),
+                          backgroundColor: const Color(0xFFBE6992),
+                          duration: const Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Icon(
+                      Icons.edit,
+                      color: Color(0xFFBE6992),
+                      size: 16,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'akansha.patel@example.com',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '+91 98765 43210',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Akansha Patel',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              letterSpacing: 0.5,
             ),
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.edit,
-              color: Color(0xFFBE6992),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFFBE6992).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
             ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Edit profile feature coming soon!'),
-                  backgroundColor: Color(0xFFBE6992),
-                  duration: Duration(seconds: 1),
-                ),
-              );
-            },
+            child: const Text(
+              'Premium Member',
+              style: TextStyle(
+                fontSize: 12,
+                color: Color(0xFFBE6992),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
+          const SizedBox(height: 16),
+          _buildContactInfo(Icons.email_outlined, 'akansha.patel@example.com'),
+          const SizedBox(height: 8),
+          _buildContactInfo(Icons.phone_outlined, '+91 98765 43210'),
         ],
       ),
     );
   }
 
+  Widget _buildContactInfo(IconData icon, String text) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 16,
+          color: Colors.grey[600],
+        ),
+        const SizedBox(width: 8),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[700],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildMenuSection(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -131,46 +213,99 @@ class ProfilePage extends StatelessWidget {
         children: [
           _buildMenuItem(
             context,
-            icon: Icons.receipt_long,
+            icon: Icons.receipt_long_outlined,
             title: 'My Orders',
+            subtitle: 'Track your orders',
             onTap: () {
-              // Switch to Orders tab (index 3)
-              MainApp.navigatorKey.currentState?.setCurrentIndex(3);
+              Navigator.pushNamed(context, '/orders');
             },
           ),
+          _buildDivider(),
           _buildMenuItem(
             context,
             icon: Icons.favorite_border,
-            title: 'My Favorites',
+            title: 'My Wishlist',
+            subtitle: 'View saved items',
             onTap: () {
-              // Switch to Favorites tab (index 2)
-              MainApp.navigatorKey.currentState?.setCurrentIndex(2);
+              Navigator.pushNamed(context, '/favorites');
             },
           ),
+          _buildDivider(),
           _buildMenuItem(
             context,
-            icon: Icons.location_on,
+            icon: Icons.location_on_outlined,
             title: 'Saved Addresses',
+            subtitle: 'Manage delivery addresses',
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Saved addresses feature coming soon!'),
-                  backgroundColor: Color(0xFFBE6992),
-                  duration: Duration(seconds: 1),
+                SnackBar(
+                  content: const Text('Saved addresses feature coming soon!'),
+                  backgroundColor: const Color(0xFFBE6992),
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               );
             },
           ),
+          _buildDivider(),
           _buildMenuItem(
             context,
-            icon: Icons.settings,
-            title: 'Settings',
+            icon: Icons.notifications_outlined,
+            title: 'Notifications',
+            subtitle: 'Manage notifications',
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Settings feature coming soon!'),
-                  backgroundColor: Color(0xFFBE6992),
-                  duration: Duration(seconds: 1),
+                SnackBar(
+                  content: const Text('Notifications feature coming soon!'),
+                  backgroundColor: const Color(0xFFBE6992),
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              );
+            },
+          ),
+          _buildDivider(),
+          _buildMenuItem(
+            context,
+            icon: Icons.help_outline,
+            title: 'Help & Support',
+            subtitle: 'Get help and support',
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Help & Support feature coming soon!'),
+                  backgroundColor: const Color(0xFFBE6992),
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              );
+            },
+          ),
+          _buildDivider(),
+          _buildMenuItem(
+            context,
+            icon: Icons.settings_outlined,
+            title: 'Settings',
+            subtitle: 'App preferences',
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Settings feature coming soon!'),
+                  backgroundColor: const Color(0xFFBE6992),
+                  duration: const Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               );
             },
@@ -184,86 +319,269 @@ class ProfilePage extends StatelessWidget {
       BuildContext context, {
         required IconData icon,
         required String title,
+        required String subtitle,
         required VoidCallback onTap,
       }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: const Color(0xFFBE6992),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFBE6992).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFFBE6992),
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 14,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
         ),
       ),
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        size: 16,
-        color: Colors.grey,
-      ),
-      onTap: onTap,
+    );
+  }
+
+  Widget _buildDivider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      height: 1,
+      color: Colors.grey[200],
     );
   }
 
   Widget _buildLogoutButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: SizedBox(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
         width: double.infinity,
-        height: 50,
-        child: OutlinedButton(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.red.withOpacity(0.2),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: ElevatedButton(
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Log Out'),
-                content: const Text('Are you sure you want to log out?'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Logged out successfully'),
-                          backgroundColor: Color(0xFFBE6992),
-                          duration: Duration(seconds: 1),
-                        ),
-                      );
-                      // Switch to Home tab (index 0)
-                      MainApp.navigatorKey.currentState?.setCurrentIndex(0);
-                    },
-                    child: const Text(
-                      'Log Out',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                ],
-              ),
-            );
+            _showLogoutDialog(context);
           },
-          style: OutlinedButton.styleFrom(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
             foregroundColor: Colors.red,
-            side: const BorderSide(color: Colors.red),
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Colors.red.withOpacity(0.3), width: 1),
             ),
           ),
-          child: const Text(
-            'Log Out',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.logout,
+                color: Colors.red,
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Log Out',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.logout,
+                color: Colors.red,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Log Out',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+        content: const Text(
+          'Are you sure you want to log out? You will need to sign in again to access your account.',
+          style: TextStyle(
+            fontSize: 14,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _performLogout(context);
+              },
+              child: const Text(
+                'Log Out',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _performLogout(BuildContext context) {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => WillPopScope(
+        onWillPop: () async => false,
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(
+                  color: Color(0xFFBE6992),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Logging out...',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
+
+    // Simulate logout process
+    Future.delayed(const Duration(seconds: 2), () {
+      // Close loading dialog first
+      Navigator.of(context, rootNavigator: true).pop();
+
+      // Navigate to login page and clear all routes
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login',
+            (Route<dynamic> route) => false,
+      );
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Logged out successfully'),
+          backgroundColor: const Color(0xFFBE6992),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    });
   }
 }
