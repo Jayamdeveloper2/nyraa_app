@@ -10,6 +10,8 @@ import 'pages/order_confirmation_page.dart';
 import 'pages/Profile/orders_page.dart';
 import 'pages/product_details_page.dart';
 import 'pages/Profile/profile_page.dart';
+import 'pages/Profile/order_details_page.dart';
+import 'pages/Profile/invoice_page.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/order_provider.dart';
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (ctx) => CartProvider()),
         ChangeNotifierProvider(create: (ctx) => FavoritesProvider()),
-        ChangeNotifierProvider(create: (context) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -40,9 +42,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           scaffoldBackgroundColor: Colors.grey[50],
         ),
-        initialRoute: '/splash',
+        initialRoute: '/splash-screen',
         routes: {
-          '/splash': (context) => const SplashScreen(),
+          '/splash-screen': (context) => const SplashScreen(),
           '/login': (context) => const LoginPage(),
           '/': (context) => const MainApp(),
           '/checkout': (context) => const CheckoutPage(),
@@ -59,6 +61,14 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const MainApp(initialIndex: 0),
           '/orders': (context) => const MainApp(initialIndex: 3),
           '/profile': (context) => const MainApp(initialIndex: 4),
+          '/order-details': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+            return OrderDetailsPage(orderId: args['orderId']);
+          },
+          '/invoice': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+            return InvoicePage(order: args['order']);
+          },
         },
       ),
     );
@@ -97,18 +107,13 @@ class _MainAppState extends State<MainApp> {
     setState(() {
       _currentIndex = index;
     });
-    print('MainApp: Index set to $_currentIndex');
   }
 
   void setCurrentIndex(int index) {
-    print('MainApp: setCurrentIndex called with index = $index');
     if (mounted) {
       setState(() {
         _currentIndex = index;
       });
-      print('MainApp: Index set to $_currentIndex');
-    } else {
-      print('MainApp: Cannot set index, widget not mounted');
     }
   }
 

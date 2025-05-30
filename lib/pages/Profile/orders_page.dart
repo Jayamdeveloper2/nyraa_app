@@ -1,4 +1,4 @@
-// lib/pages/orders_page.dart
+// lib/pages/Profile/orders_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/products_data.dart';
@@ -98,7 +98,6 @@ class OrdersPage extends StatelessWidget {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              // Navigate to home tab
               MainApp.navigatorKey.currentState?.setCurrentIndex(0);
             },
             style: ElevatedButton.styleFrom(
@@ -259,6 +258,8 @@ class OrdersPage extends StatelessWidget {
                           width: 60,
                           height: 60,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.broken_image, size: 60),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -297,9 +298,9 @@ class OrdersPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   '+${order.items.length - 2} more items',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: const Color(0xFFBE6992),
+                    color: Color(0xFFBE6992),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -309,12 +310,7 @@ class OrdersPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate to order confirmation page
-                  Navigator.pushNamed(
-                    context,
-                    '/order-confirmation',
-                    arguments: {'orderId': order.id},
-                  );
+                  Navigator.pushNamed(context, '/order-details', arguments: {'orderId': order.id});
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFBE6992),

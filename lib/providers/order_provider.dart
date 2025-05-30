@@ -27,7 +27,6 @@ class OrderProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   Future<Order> placeOrder(List<CartItem> cartItems, double total, String address) async {
-    // Generate a random order ID
     final orderId = 'OD${DateTime.now().millisecondsSinceEpoch.toString().substring(0, 8)}';
 
     final orderItems = cartItems.map((item) => OrderItem(
@@ -50,5 +49,23 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
 
     return order;
+  }
+
+  Future<void> cancelOrder(String orderId) async {
+    _orders = _orders.map((order) {
+      if (order.id == orderId && order.status == 'Processing') {
+        return Order(
+          id: order.id,
+          items: order.items,
+          total: order.total,
+          status: 'Cancelled',
+          date: order.date,
+          deliveryAddress: order.deliveryAddress,
+        );
+      }
+      return order;
+    }).toList();
+    await SharedPrefsService.saveOrders(_orders);
+    notifyListeners();
   }
 }

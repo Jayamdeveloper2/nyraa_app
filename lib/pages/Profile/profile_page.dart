@@ -1,6 +1,7 @@
 // lib/pages/Profile/profile_page.dart
 import 'package:flutter/material.dart';
 import '../../data/profileData.dart';
+import '../../main.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -269,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           onPressed: () {
-            Navigator.pop(context); // Navigate to previous page
+            MainApp.navigatorKey.currentState?.setCurrentIndex(3); // Navigate to Orders page
           },
         ),
       ),
@@ -495,7 +496,7 @@ class _ProfilePageState extends State<ProfilePage> {
             title: 'My Orders',
             subtitle: 'Track your orders',
             onTap: () {
-              Navigator.pushNamed(context, '/orders');
+              MainApp.navigatorKey.currentState?.setCurrentIndex(3);
             },
           ),
           _buildDivider(),
@@ -505,7 +506,7 @@ class _ProfilePageState extends State<ProfilePage> {
             title: 'My Wishlist',
             subtitle: 'View saved items',
             onTap: () {
-              Navigator.pushNamed(context, '/favorites');
+              MainApp.navigatorKey.currentState?.setCurrentIndex(2);
             },
           ),
           _buildDivider(),
