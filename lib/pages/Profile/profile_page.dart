@@ -1,11 +1,247 @@
-// lib/pages/profile_page.dart
+// lib/pages/Profile/profile_page.dart
 import 'package:flutter/material.dart';
+import '../../data/profileData.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late UserData _user;
+  bool _isEditingName = false;
+  bool _isEditingPhone = false;
+  late TextEditingController _nameController;
+  late TextEditingController _phoneController;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+    _nameController = TextEditingController();
+    _phoneController = TextEditingController();
+  }
+
+  Future<void> _loadUserData() async {
+    final userData = await getUserData();
+    setState(() {
+      _user = userData;
+      _nameController.text = userData.name;
+      _phoneController.text = userData.phone;
+      _isLoading = false;
+    });
+  }
+
+  void _toggleEditName() {
+    setState(() {
+      if (_isEditingName) {
+        _nameController.text = _user.name;
+      }
+      _isEditingName = !_isEditingName;
+    });
+  }
+
+  void _toggleEditPhone() {
+    setState(() {
+      if (_isEditingPhone) {
+        _phoneController.text = _user.phone;
+      }
+      _isEditingPhone = !_isEditingPhone;
+    });
+  }
+
+  Future<void> _saveName() async {
+    final newName = _nameController.text.trim();
+    if (newName.isNotEmpty) {
+      final updatedUser = UserData(
+        email: _user.email,
+        name: newName,
+        phone: _user.phone,
+        joinDate: _user.joinDate,
+      );
+      await updateUserData(updatedUser);
+      setState(() {
+        _user = updatedUser;
+        _isEditingName = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Profile updated successfully'),
+          backgroundColor: const Color(0xFFBE6992),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _savePhone() async {
+    final newPhone = _phoneController.text.trim();
+    if (newPhone.isNotEmpty) {
+      final updatedUser = UserData(
+        email: _user.email,
+        name: _user.name,
+        phone: newPhone,
+        joinDate: _user.joinDate,
+      );
+      await updateUserData(updatedUser);
+      setState(() {
+        _user = updatedUser;
+        _isEditingPhone = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Profile updated successfully'),
+          backgroundColor: const Color(0xFFBE6992),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(
+                Icons.logout,
+                color: Colors.red,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Log Out',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ],
+        ),
+        content: const Text(
+          'Are you sure you want to log out? You will need to sign in again to access your account.',
+          style: TextStyle(
+            fontSize: 14,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _performLogout();
+            },
+            child: const Text(
+              'Log Out',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _performLogout() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              CircularProgressIndicator(
+                color: Color(0xFFBE6992),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Logging out...',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await Future.delayed(const Duration(seconds: 2));
+    await clearUserData();
+
+    if (mounted) {
+      Navigator.pop(context); // Close loading dialog
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Logged out successfully'),
+          backgroundColor: const Color(0xFFBE6992),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Color(0xFFBE6992)),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
@@ -33,18 +269,18 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context); // Navigate to previous page
           },
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildUserInfoSection(context),
+            _buildUserInfoSection(),
             const SizedBox(height: 16),
             _buildMenuSection(context),
             const SizedBox(height: 24),
-            _buildLogoutButton(context),
+            _buildLogoutButton(),
             const SizedBox(height: 32),
           ],
         ),
@@ -52,7 +288,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildUserInfoSection(BuildContext context) {
+  Widget _buildUserInfoSection() {
     return Container(
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.all(24),
@@ -98,50 +334,12 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('Edit profile feature coming soon!'),
-                          backgroundColor: const Color(0xFFBE6992),
-                          duration: const Duration(seconds: 2),
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.edit,
-                      color: Color(0xFFBE6992),
-                      size: 16,
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Akansha Patel',
-            style: TextStyle(
+          Text(
+            _user.name,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -165,15 +363,46 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          _buildContactInfo(Icons.email_outlined, 'akansha.patel@example.com'),
+          _buildContactInfo(Icons.email_outlined, _user.email, editable: false),
           const SizedBox(height: 8),
-          _buildContactInfo(Icons.phone_outlined, '+91 98765 43210'),
+          _buildContactInfo(
+            Icons.person_outline,
+            _user.name,
+            editable: true,
+            isEditing: _isEditingName,
+            controller: _nameController,
+            onEdit: _toggleEditName,
+            onSave: _saveName,
+            onCancel: _toggleEditName,
+          ),
+          const SizedBox(height: 8),
+          _buildContactInfo(
+            Icons.phone_outlined,
+            _user.phone,
+            editable: true,
+            isEditing: _isEditingPhone,
+            controller: _phoneController,
+            onEdit: _toggleEditPhone,
+            onSave: _savePhone,
+            onCancel: _toggleEditPhone,
+          ),
+          const SizedBox(height: 8),
+          _buildContactInfo(Icons.calendar_today, _user.joinDate, editable: false),
         ],
       ),
     );
   }
 
-  Widget _buildContactInfo(IconData icon, String text) {
+  Widget _buildContactInfo(
+      IconData icon,
+      String text, {
+        bool editable = false,
+        bool isEditing = false,
+        TextEditingController? controller,
+        VoidCallback? onEdit,
+        VoidCallback? onSave,
+        VoidCallback? onCancel,
+      }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -183,12 +412,61 @@ class ProfilePage extends StatelessWidget {
           color: Colors.grey[600],
         ),
         const SizedBox(width: 8),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[700],
-            fontWeight: FontWeight.w500,
+        Expanded(
+          child: isEditing
+              ? Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Color(0xFFBE6992)),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: onSave,
+                child: const Icon(Icons.check, color: Color(0xFFBE6992), size: 20),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: onCancel,
+                child: const Icon(Icons.close, color: Colors.grey, size: 20),
+              ),
+            ],
+          )
+              : Row(
+            children: [
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              if (editable && !isEditing) ...[
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: onEdit,
+                  child: const Icon(
+                    Icons.edit,
+                    color: Color(0xFFBE6992),
+                    size: 16,
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       ],
@@ -391,7 +669,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
+  Widget _buildLogoutButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -407,9 +685,7 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
         child: ElevatedButton(
-          onPressed: () {
-            _showLogoutDialog(context);
-          },
+          onPressed: _showLogoutDialog,
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: Colors.red,
@@ -444,144 +720,10 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.logout,
-                color: Colors.red,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 12),
-            const Text(
-              'Log Out',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
-        content: const Text(
-          'Are you sure you want to log out? You will need to sign in again to access your account.',
-          style: TextStyle(
-            fontSize: 14,
-            height: 1.5,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Cancel',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _performLogout(context);
-              },
-              child: const Text(
-                'Log Out',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _performLogout(BuildContext context) {
-    // Show loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => WillPopScope(
-        onWillPop: () async => false,
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(
-                  color: Color(0xFFBE6992),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Logging out...',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    // Simulate logout process
-    Future.delayed(const Duration(seconds: 2), () {
-      // Close loading dialog first
-      Navigator.of(context, rootNavigator: true).pop();
-
-      // Navigate to login page and clear all routes
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/login',
-            (Route<dynamic> route) => false,
-      );
-
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Logged out successfully'),
-          backgroundColor: const Color(0xFFBE6992),
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
-    });
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    super.dispose();
   }
 }

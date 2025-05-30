@@ -1,7 +1,6 @@
-// lib/splash_screen.dart
-import 'package:flutter/material.dart';
-import '../pages/auth/login_page.dart';
+// lib/splashscreens/splash_screen.dart
 import 'dart:async';
+import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,8 +13,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    // Start a 3-second timer to navigate to login screen
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     });
   }
 

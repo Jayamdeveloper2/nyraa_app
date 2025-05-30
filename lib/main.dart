@@ -1,3 +1,4 @@
+// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'pages/cart_page.dart';
@@ -53,9 +54,11 @@ class MyApp extends StatelessWidget {
             final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
             return ProductDetailsPage(productId: args['productId']);
           },
-          '/cart': (ctx) => const CartPage(),
-          '/favorites': (ctx) => const FavoritesPage(),
-          '/home': (ctx) => const MainApp(),
+          '/cart': (context) => const MainApp(initialIndex: 1),
+          '/favorites': (context) => const MainApp(initialIndex: 2),
+          '/home': (context) => const MainApp(initialIndex: 0),
+          '/orders': (context) => const MainApp(initialIndex: 3),
+          '/profile': (context) => const MainApp(initialIndex: 4),
         },
       ),
     );
@@ -82,8 +85,6 @@ class _MainAppState extends State<MainApp> {
     _currentIndex = widget.initialIndex;
   }
 
-
-
   final List<Widget> _pages = [
     const HomePage(),
     const CartPage(),
@@ -96,17 +97,18 @@ class _MainAppState extends State<MainApp> {
     setState(() {
       _currentIndex = index;
     });
+    print('MainApp: Index set to $_currentIndex');
   }
 
   void setCurrentIndex(int index) {
-    print('MainApp: setCurrentIndex called with index = $index'); // Debug
+    print('MainApp: setCurrentIndex called with index = $index');
     if (mounted) {
       setState(() {
         _currentIndex = index;
       });
-      print('MainApp: Index set to $_currentIndex'); // Debug
+      print('MainApp: Index set to $_currentIndex');
     } else {
-      print('MainApp: Cannot set index, widget not mounted'); // Debug
+      print('MainApp: Cannot set index, widget not mounted');
     }
   }
 
